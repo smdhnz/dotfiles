@@ -1,5 +1,3 @@
-let g:polyglot_disabled = ['markdown']
-
 " -------------------------------------------------------
 " プラグイン
 " -------------------------------------------------------
@@ -44,6 +42,9 @@ let g:coc_disable_startup_warning = 1
 let g:sneak#label = 1
 " set filetypes as typescriptreact
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
+
+let g:indentLine_conceallevel = 0
+set conceallevel=0
 
 " -------------------------------------------------------
 " general
