@@ -1,5 +1,3 @@
-set nocompatible
-let g:polyglot_disabled = ['markdown']
 " -------------------------------------------------------
 " Plugin
 " -------------------------------------------------------
@@ -13,11 +11,12 @@ Plug 'justinmk/vim-sneak' " s + 二文字で検索
 Plug 'airblade/vim-gitgutter' " Git ステータス
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " インテリジェンス
 Plug 'ervandew/supertab' " タブで補完を選択
-Plug 'ap/vim-css-color' " CSSカラーハイライト
 Plug 'mzlogin/vim-markdown-toc' " マークダウンの目次生成
 Plug 'justinmk/vim-dirvish' " ファイラ
 Plug 'roginfarrer/vim-dirvish-dovish', {'branch': 'main'} " ファイラ
-Plug 'sheerun/vim-polyglot'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " ハイライト
+Plug 'junegunn/goyo.vim' " 中央寄せ
+Plug 'norcalli/nvim-colorizer.lua'
 call plug#end()
 
 
@@ -33,6 +32,20 @@ autocmd BufNewFile,BufRead *.tsx set filetype=typescriptreact " set filetypes as
 if !argc()
   autocmd VimEnter * normal -
 endif
+let g:goyo_height = 100
+set termguicolors
+
+lua <<EOF
+require('nvim-treesitter.configs').setup{
+highlight = {
+  enable = true,
+  },
+indent = {
+  enable = true,
+  },
+}
+require('colorizer').setup()
+EOF
 
 
 " -------------------------------------------------------
@@ -63,6 +76,7 @@ set laststatus=2
 set noshowmode "モードを変えたときに左下にでる文字を無効化する
 set nowrap " 行を画面の終端で折り返さない
 set cmdheight=1
+set cursorline "カーソルライン
 
 
 " -------------------------------------------------------
@@ -118,11 +132,6 @@ let &t_EI.="\e[2 q"
 let &t_SR.="\e[4 q"
 syntax enable
 " Spaceduck
-if exists('+termguicolors')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
 autocmd ColorScheme * highlight Comment ctermfg=60 guifg=#5f5f87
 colorscheme spaceduck
 let g:lightline = { 'colorscheme': 'spaceduck' }
