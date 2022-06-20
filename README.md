@@ -1,2 +1,11 @@
 # dotfiles
-https://zenn.dev/duglaser/articles/c02d6a937a48df
+
+## neovim install
+```bash
+$ brew install --HEAD luajit
+$ brew install --HEAD neovim
+```
+
+```
+:TSInstall <language>
+```
