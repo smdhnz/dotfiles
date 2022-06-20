@@ -1,0 +1,110 @@
+{
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "actions": 
+    [
+        {
+            "command": 
+            {
+                "action": "moveFocus",
+                "direction": "up"
+            },
+            "keys": "ctrl+shift+k"
+        },
+        {
+            "command": "find",
+            "keys": "ctrl+shift+f"
+        },
+        {
+            "command": 
+            {
+                "action": "moveFocus",
+                "direction": "left"
+            },
+            "keys": "ctrl+shift+h"
+        },
+        {
+            "command": 
+            {
+                "action": "moveFocus",
+                "direction": "right"
+            },
+            "keys": "ctrl+shift+l"
+        },
+        {
+            "command": 
+            {
+                "action": "splitPane",
+                "split": "auto",
+                "splitMode": "duplicate"
+            },
+            "keys": "ctrl+shift+p"
+        },
+        {
+            "command": 
+            {
+                "action": "moveFocus",
+                "direction": "down"
+            },
+            "keys": "ctrl+shift+j"
+        }
+    ],
+    "alwaysShowTabs": true,
+    "centerOnLaunch": true,
+    "confirmCloseAllTabs": false,
+    "copyFormatting": "all",
+    "copyOnSelect": true,
+    "largePasteWarning": false,
+    "launchMode": "default",
+    "multiLinePasteWarning": false,
+    "profiles": 
+    {
+        "defaults": 
+        {
+            "antialiasingMode": "grayscale",
+            "bellStyle": 
+            [
+                "window",
+                "taskbar"
+            ],
+            "colorScheme": "SpaceDuck",
+            "cursorShape": "filledBox",
+            "font": 
+            {
+                "face": "CaskaydiaCove Nerd Font",
+                "size": 12
+            },
+            "padding": "0",
+            "scrollbarState": "visible",
+            "snapOnInput": true
+        }
+    },
+    "schemes": 
+    [
+        {
+            "name": "SpaceDuck",
+            "foreground": "#ecf0c1",
+            "background": "#0f111b",
+            "black": "#000000",
+            "red": "#e33400",
+            "green": "#5ccc96",
+            "yellow": "#b3a1e6",
+            "blue": "#00a3cc",
+            "purple": "#f2ce00",
+            "cyan": "#7a5ccc",
+            "white": "#686f9a",
+            "brightBlack": "#686f9a",
+            "brightRed": "#e33400",
+            "brightGreen": "#5ccc96",
+            "brightYellow": "#b3a1e6",
+            "brightBlue": "#00a3cc",
+            "brightPurple": "#f2ce00",
+            "brightCyan": "#7a5ccc",
+            "brightWhite": "#f0f1ce"
+        }
+    ],
+    "showTabsInTitlebar": true,
+    "startOnUserLogin": true,
+    "tabWidthMode": "compact",
+    "useAcrylicInTabRow": true,
+    "windowingBehavior": "useExisting"
+}
