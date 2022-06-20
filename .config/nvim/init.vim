@@ -12,8 +12,6 @@ Plug 'airblade/vim-gitgutter' " Git ステータス
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " インテリジェンス
 Plug 'ervandew/supertab' " タブで補完を選択
 Plug 'mzlogin/vim-markdown-toc' " マークダウンの目次生成
-Plug 'justinmk/vim-dirvish' " ファイラ
-Plug 'roginfarrer/vim-dirvish-dovish', {'branch': 'main'} " ファイラ
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " ハイライト
 Plug 'junegunn/goyo.vim' " 中央寄せ
 Plug 'norcalli/nvim-colorizer.lua'
@@ -29,13 +27,11 @@ let g:sneak#label = 1
 let g:indentLine_conceallevel = 0 " Markdownで強調表示が消えるのを防ぐ
 set conceallevel=0
 autocmd BufNewFile,BufRead *.tsx set filetype=typescriptreact " set filetypes as typescriptreact
-if !argc()
-  autocmd VimEnter * normal -
-endif
 let g:goyo_height = 100
 set termguicolors
 
 lua <<EOF
+
 require('nvim-treesitter.configs').setup{
 highlight = {
   enable = true,
@@ -44,7 +40,9 @@ indent = {
   enable = true,
   },
 }
+
 require('colorizer').setup()
+
 EOF
 
 
@@ -91,7 +89,7 @@ nmap <C-h> <C-w>h
 nmap <C-j> <C-w>j
 nmap <C-k> <C-w>k
 nmap <C-l> <C-w>l
-nmap <silent> <Leader>e <Cmd>Fern . -drawer -toggle<CR>
+nmap <silent> <Leader>e <Cmd>CocCommand explorer<CR>
 nmap <silent> <Leader><Leader> :let @/ = '\<' . expand('<cword>') . '\>'<CR>:set hlsearch<CR>
 nmap p ]p
 nmap P ]P
