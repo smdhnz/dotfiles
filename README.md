@@ -36,6 +36,8 @@ $ brew install --HEAD luajit
 $ brew install --HEAD neovim
 $ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
   https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+$ curl -Lo ~/.config/nvim/init.vim https://github.com/smdhnz/dotfiles/raw/main/.config/nvim/init.vim --create-dirs
+$ curl -Lo ~/.config/nvim/after/plugin/global.vim https://github.com/smdhnz/dotfiles/raw/main/.config/nvim/after/plugin/global.vim --create-dirs
 ```
 
 ## vim ts server install
