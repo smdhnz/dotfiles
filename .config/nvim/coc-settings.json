@@ -12,6 +12,9 @@
     "mc": "copyFile",
     "md": "delete",
     "ma": "addFile",
-    "mA": "addDirectory"
+    "mA": "addDirectory",
+    "<cr>": ["wait", "expandable?", ["wait", "expanded?", "collapse", "expand"], "open"],
+    "o": ["wait", "expandable?", "cd", "open"],
+    "u": ["wait", "gotoParent"]
   }
 }
