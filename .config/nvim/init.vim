@@ -4,45 +4,54 @@
 call plug#begin('~/.vim/plugged')
 Plug 'pineapplegiant/spaceduck', { 'branch': 'main' } " テーマ
 Plug 'itchyny/lightline.vim' " 下部のステータスライン
-Plug 'Yggdroot/indentLine' " インデントの強調表示
+Plug 'lukas-reineke/indent-blankline.nvim' " インデントライン
 Plug 'mechatroner/rainbow_csv' " CSVをレインボーにする
 Plug 'tpope/vim-commentary' " gccでコメントアウトできる
 Plug 'justinmk/vim-sneak' " s + 二文字で検索
 Plug 'airblade/vim-gitgutter' " Git ステータス
-Plug 'neoclide/coc.nvim', {'branch': 'release'} " インテリジェンス
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ervandew/supertab' " タブで補完を選択
 Plug 'mzlogin/vim-markdown-toc' " マークダウンの目次生成
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " ハイライト
-Plug 'junegunn/goyo.vim' " 中央寄せ
+Plug 'yioneko/nvim-yati' " インデント
 Plug 'norcalli/nvim-colorizer.lua'
+Plug 'akinsho/toggleterm.nvim', {'tag': 'v1.*'} " terminal
 call plug#end()
 
 
 " -------------------------------------------------------
 " plugin script
 " -------------------------------------------------------
-let g:SuperTabDefaultCompletionType = "<c-n>" " タブで補完を選択するときに下向きに選択していく
+" coc
 let g:coc_disable_startup_warning = 1
+" super tab
+let g:SuperTabDefaultCompletionType = "<c-n>" " タブで補完を選択するときに下向きに選択していく
+" sneak search
 let g:sneak#label = 1
+" indent line
 let g:indentLine_conceallevel = 0 " Markdownで強調表示が消えるのを防ぐ
+" toggle term
+autocmd TermEnter term://*toggleterm#*
+\ tnoremap <silent><c-\> <Cmd>exe v:count1 . "ToggleTerm"<CR>
+nnoremap <silent>\ <Cmd>exe v:count1 . "ToggleTerm"<CR>
+" general
 set conceallevel=0
 autocmd BufNewFile,BufRead *.tsx set filetype=typescriptreact " set filetypes as typescriptreact
-let g:goyo_height = 100
 set termguicolors
-
-lua <<EOF
-
+" lua
+lua << EOF
 require('nvim-treesitter.configs').setup{
-highlight = {
-  enable = true,
-  },
-indent = {
-  enable = true,
-  },
+  highlight = { enable = true },
+  yati = { enable = true }
 }
-
 require('colorizer').setup()
-
+require("indent_blankline").setup {
+  show_current_context_start = true,
+  show_end_of_line = true
+}
+require("toggleterm").setup{
+  direction = 'float'
+}
 EOF
 
 
