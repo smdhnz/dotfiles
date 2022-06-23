@@ -34,8 +34,8 @@ $ sudo curl -L https://github.com/docker/compose/releases/download/1.16.1/docker
 $ sudo chmod +x /usr/local/bin/docker-compose
 $ brew install --HEAD luajit
 $ brew install --HEAD neovim
-$ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+$ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 ```
 
 ## vim ts server install
