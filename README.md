@@ -28,12 +28,14 @@ $ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plug
 $ sudo visudo
 > [username] ALL=(ALL:ALL) NOPASSWD: /usr/sbin/service docker start
 $ echo "if test $(service docker status | awk '{print $4}') = 'not'; then
-      sudo /usr/sbin/service docker start
+    sudo /usr/sbin/service docker start
   fi" >> ~/.bashrc
 $ sudo curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 $ sudo chmod +x /usr/local/bin/docker-compose
 $ brew install --HEAD luajit
 $ brew install --HEAD neovim
+$ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
 
 ## vim ts server install
