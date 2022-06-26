@@ -31,8 +31,6 @@ $ echo "if test $(service docker status | awk '{print $4}') = 'not'; then
     sudo /usr/sbin/service docker start
   fi" >> ~/.bashrc
 $ sudo usermod -aG docker $(whoami)
-$ sudo curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-$ sudo chmod +x /usr/local/bin/docker-compose
 $ brew install --HEAD luajit
 $ brew install --HEAD neovim
 $ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
