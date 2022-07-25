@@ -1,55 +1,20 @@
-# First Setup
+- apt
+  - build-essential
+  - [docker](https://docs.docker.com/engine/install/ubuntu/)
+    - `sudo visudo` >> `[username] ALL=(ALL:ALL) NOPASSWD: /usr/sbin/service docker start`
+    - `sudo usermod -aG docker $(whoami)`
+- [brew](https://brew.sh/index_ja)
+  - gcc
+  - python@3.10
+  - n
+    - yarn
+      - wsl-open
+  - --HEAD luajit
+  - --HEAD neovim
+    - [vim-plug](https://github.com/junegunn/vim-plug)
+- [nerd font](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/CascadiaCode.zip)
+    
 
-```bash
-$ sudo apt update && sudo apt upgrade
-$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-$ echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/$(whoami)/.profile
-$ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-$ sudo apt-get install build-essential
-$ brew install gcc
-$ brew install python@3.10
-$ echo 'export PATH="/home/linuxbrew/.linuxbrew/opt/python@3.10/bin:$PATH"' >> ~/.profile
-$ echo 'export LDFLAGS="-L/home/linuxbrew/.linuxbrew/opt/python@3.10/lib"' >> ~/.profile
-$ echo 'export CPPFLAGS="-I/home/linuxbrew/.linuxbrew/opt/python@3.10/include"' >> ~/.profile
-$ brew install n
-$ sudo /home/linuxbrew/.linuxbrew/bin/n lts
-$ sudo npm --location=global install yarn
-$ echo 'export PATH="/home/$(whoami)/.yarn/bin:$PATH"' >> ~/.profile
-$ yarn global add wsl-open
-$ sudo apt-get remove docker docker-engine docker.io containerd runc
-$ sudo apt-get install ca-certificates curl gnupg lsb-release
-$ sudo mkdir -p /etc/apt/keyrings
-$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-$ echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-$ sudo apt-get update
-$ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
-$ sudo visudo
-> [username] ALL=(ALL:ALL) NOPASSWD: /usr/sbin/service docker start
-$ echo "if test $(service docker status | awk '{print $4}') = 'not'; then
-    sudo /usr/sbin/service docker start
-  fi" >> ~/.bashrc
-$ sudo usermod -aG docker $(whoami)
-$ brew install --HEAD luajit
-$ brew install --HEAD neovim
-$ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-$ curl -Lo ~/.config/nvim/init.vim https://github.com/smdhnz/dotfiles/raw/main/.config/nvim/init.vim --create-dirs
-$ curl -Lo ~/.config/nvim/after/plugin/global.vim https://github.com/smdhnz/dotfiles/raw/main/.config/nvim/after/plugin/global.vim --create-dirs
-```
+      
 
-## vim ts server install
-https://github.com/nvim-treesitter/nvim-treesitter
-```
-:TSInstall <language>
-```
 
-## nerd font ( windows terminal )
-download: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/CascadiaCode.zip
-
-## coc-explorer
-```
-:CocInstall coc-explorer
-:CocConfig
-```
