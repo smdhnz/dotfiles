@@ -16,29 +16,75 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " ハイライト
 Plug 'yioneko/nvim-yati' " インデント
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'akinsho/toggleterm.nvim', {'tag': 'v1.*'} " terminal
+Plug 'mracos/mermaid.vim'
+Plug 'previm/previm'
 call plug#end()
 
 
 " -------------------------------------------------------
-" plugin script
-" -------------------------------------------------------
 " coc
+" -------------------------------------------------------
 let g:coc_disable_startup_warning = 1
+let g:coc_global_extensions = [
+  \ 'coc-jedi',
+  \ 'coc-yaml',
+  \ 'coc-html',
+  \ 'coc-json',
+  \ 'coc-lua',
+  \ 'coc-tsserver',
+\ ]
+nmap <silent> e <Cmd>CocCommand explorer<CR>
+
+
+" -------------------------------------------------------
 " super tab
+" -------------------------------------------------------
 let g:SuperTabDefaultCompletionType = "<c-n>" " タブで補完を選択するときに下向きに選択していく
+
+
+" -------------------------------------------------------
 " sneak search
+" -------------------------------------------------------
 let g:sneak#label = 1
+
+
+" -------------------------------------------------------
 " indent line
+" -------------------------------------------------------
 let g:indentLine_conceallevel = 0 " Markdownで強調表示が消えるのを防ぐ
+
+
+" -------------------------------------------------------
 " toggle term
+" -------------------------------------------------------
 autocmd TermEnter term://*toggleterm#*
 \ tnoremap <silent><c-\> <Cmd>exe v:count1 . "ToggleTerm"<CR>
-nnoremap <silent>\ <Cmd>exe v:count1 . "ToggleTerm"<CR>
+nnoremap <silent><c-\> <Cmd>exe v:count1 . "ToggleTerm"<CR>
+
+
+" -------------------------------------------------------
+" previm
+" -------------------------------------------------------
+let g:previm_open_cmd = '/mnt/c/Program\ Files\ \(x86\)/Microsoft/Edge/Application/msedge.exe --inprivate'
+let g:previm_wsl_mode = 1
+let g:previm_disable_default_css = 1
+let g:previm_custom_css_path = '~/public/css/github.css'
+let g:previm_enable_realtime = 1
+let g:previm_show_header = 0
+nmap <silent> - <Cmd>PrevimOpen<CR>
+
+
+" -------------------------------------------------------
 " general
+" -------------------------------------------------------
 set conceallevel=0
-autocmd BufNewFile,BufRead *.tsx set filetype=typescriptreact " set filetypes as typescriptreact
+autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact " set filetypes as typescriptreact
 set termguicolors
-" lua
+
+
+" -------------------------------------------------------
+" Lua settings
+" -------------------------------------------------------
 lua << EOF
 require('nvim-treesitter.configs').setup{
   highlight = { enable = true },
@@ -98,7 +144,6 @@ nmap <C-h> <C-w>h
 nmap <C-j> <C-w>j
 nmap <C-k> <C-w>k
 nmap <C-l> <C-w>l
-nmap <silent> <Leader>e <Cmd>CocCommand explorer<CR>
 nmap <silent> <Leader><Leader> :let @/ = '\<' . expand('<cword>') . '\>'<CR>:set hlsearch<CR>
 nmap p ]p
 nmap P ]P
@@ -142,4 +187,14 @@ syntax enable
 autocmd ColorScheme * highlight Comment ctermfg=60 guifg=#5f5f87
 colorscheme spaceduck
 let g:lightline = { 'colorscheme': 'spaceduck' }
+
 filetype plugin indent on
+
+
+" -------------------------------------------------------
+" Indent
+" -------------------------------------------------------
+autocmd FileType python setlocal sw=4 sts=4 ts=4 et
+autocmd FileType markdown setlocal sw=4 sts=4 ts=4 et
+
+
