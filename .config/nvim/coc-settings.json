@@ -16,5 +16,11 @@
     "<cr>": ["wait", "expandable?", ["wait", "expanded?", "collapse", "expand"], "open"],
     "o": ["wait", "expandable?", "cd", "open"],
     "u": ["wait", "gotoParent"]
-  }
+  },
+  "suggest.minTriggerInputLength": 0,
+  "diagnostic.errorSign": "",
+  "diagnostic.warningSign": "",
+  "diagnostic.infoSign": "",
+  "diagnostic.hintSign": "",
+  "links.tooltip": true
 }
