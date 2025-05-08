@@ -1,7 +1,7 @@
-if [ -f ~/.bashrc-aliases ]; then
-    . ~/.bashrc-aliases
+if [ -f ~/.bashrc_aliases ]; then
+    . ~/.bashrc_aliases
 fi
 
-if [ -f ~/.bashrc-functions ]; then
-    . ~/.bashrc-functions
+if [ -f ~/.bashrc_functions ]; then
+    . ~/.bashrc_functions
 fi

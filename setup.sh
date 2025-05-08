@@ -28,6 +28,8 @@ sudo rm -rf /opt/nvim
 sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
 rm nvim-linux-x86_64.tar.gz
 echo 'export PATH="$PATH:/opt/nvim-linux-x86_64/bin"' >> $HOME/.bashrc
+mkdir -p "$HOME/.config/nvim"
+curl -fsSL https://raw.githubusercontent.com/smdhnz/dotfiles/refs/heads/main/nvim/init.lua -o "$HOME/.config/nvim/init.lua"
 
 # Lazygit
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
@@ -40,3 +42,8 @@ rm -rf lazygit.tar.gz lazygit
 curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh && rm get-docker.sh
 sudo gpasswd -a $USER docker
 sudo service docker restart
+
+# bashrc
+curl -fsSL https://raw.githubusercontent.com/smdhnz/dotfiles/refs/heads/main/bash/.bashrc_aliases -o "$HOME/.bashrc_aliases"
+curl -fsSL https://raw.githubusercontent.com/smdhnz/dotfiles/refs/heads/main/bash/.bashrc_functions -o "$HOME/.bashrc_functions"
+curl -fsSL https://raw.githubusercontent.com/smdhnz/dotfiles/refs/heads/main/bash/.bashrc >> "$HOME/.bashrc"
