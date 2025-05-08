@@ -16,6 +16,10 @@ volta install \
   @vue/typescript-plugin \
   @fsouza/prettierd
 
+# Python
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source $HOME/.local/bin/env
+
 # Git setup
 git config --global user.name $YOUR_USER_NAME
 git config --global user.email $YOUR_USER_EMAIL

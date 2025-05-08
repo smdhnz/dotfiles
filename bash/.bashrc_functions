@@ -11,12 +11,7 @@ function activate () {
   done
 
   # 見つからなければカレントディレクトリに新しく作成
-  python3 -m venv --without-pip .venv &> /dev/null && \
-  source .venv/bin/activate &> /dev/null && \
-  curl -LO https://bootstrap.pypa.io/get-pip.py &> /dev/null && \
-  python3 get-pip.py &> /dev/null && \
-  rm get-pip.py &> /dev/null && \
-  pip install isort black pyright &> /dev/null
+  uv venv && source .venv/bin/activate && uv pip install isort black pyright
 }
 
 
