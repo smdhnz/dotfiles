@@ -14,7 +14,8 @@ volta install \
   typescript \
   typescript-language-server \
   @vue/typescript-plugin \
-  @fsouza/prettierd
+  @fsouza/prettierd \
+  @prisma/language-server
 
 # Python
 curl -LsSf https://astral.sh/uv/install.sh | sh

@@ -424,6 +424,11 @@ require("lazy").setup({
         },
         root_dir = require("lspconfig.util").root_pattern("tsconfig.json", "jsconfig.json", "package.json", ".git"),
       })
+
+      lspconfig.prismals.setup({
+        on_attach = on_attach,
+        filetypes = { "prisma" },
+      })
     end
   },
   {
