@@ -35,6 +35,8 @@ rm nvim-linux-x86_64.tar.gz
 echo 'export PATH="$PATH:/opt/nvim-linux-x86_64/bin"' >> $HOME/.bashrc
 mkdir -p "$HOME/.config/nvim"
 curl -fsSL https://raw.githubusercontent.com/smdhnz/dotfiles/main/nvim/init.lua -o "$HOME/.config/nvim/init.lua"
+nvim --headless "+Lazy! sync" +qa
+nvim --headless -c "lua require('nvim-treesitter.install').update({ with_sync = true })" -c "qa"
 
 # Lazygit
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')

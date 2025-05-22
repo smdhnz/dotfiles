@@ -337,10 +337,6 @@ require("lazy").setup({
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({
-        ensure_installed = {
-          "lua", "yaml", "json", "css", "typescript", "javascript",
-          "tsx", "vue", "dockerfile", "prisma", "python",
-        },
         highlight = { enable = true, disable = { "markdown" } },
         autotag = { enable = true },
         indent = { enable = false },
