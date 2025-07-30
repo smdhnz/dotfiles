@@ -1,0 +1,9 @@
+{
+  "selectedAuthType": "gemini-api-key",
+  "theme": "Atom One",
+  "preferredEditor": "nvim",
+  "contextFileName": "AGENTS.md",
+  "usageStatisticsEnabled": false,
+  "hideTips": true,
+  "hideBanner": true
+}
