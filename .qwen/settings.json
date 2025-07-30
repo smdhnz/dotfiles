@@ -1,0 +1,9 @@
+{
+  "selectedAuthType": "openai",
+  "theme": "Atom One",
+  "preferredEditor": "nvim",
+  "contextFileName": "AGENTS.md",
+  "usageStatisticsEnabled": false,
+  "hideTips": true,
+  "hideBanner": true
+}
