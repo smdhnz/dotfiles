@@ -19,6 +19,7 @@ opt.showtabline = 0
 vim.o.signcolumn = "yes"
 opt.cmdheight = 0
 opt.laststatus = 3
+vim.o.winborder = "single"
 
 -- 検索関連
 opt.smartcase = true
@@ -238,7 +239,7 @@ require("lazy").setup({
       close_if_last_window = true,
       enable_git_status = true,
       enable_diagnostics = true,
-      popup_border_style = "rounded",
+      popup_border_style = "single",
       window = {
         position = "float",
         mappings = {
@@ -354,7 +355,7 @@ require("lazy").setup({
       vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
         vim.lsp.handlers.hover,
         {
-          border = "rounded",
+          border = "single",
           max_width = 60,
           max_height = 15,
         }
@@ -368,7 +369,7 @@ require("lazy").setup({
         update_in_insert = false,
         severity_sort = true,
         float = {
-          border = "rounded",
+          border = "single",
           source = "always",
           prefix = "● ",
         },
@@ -442,46 +443,23 @@ require("lazy").setup({
     end
   },
   {
-    -- cmp補完
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-      "hrsh7th/cmp-cmdline",
-      "L3MON4D3/LuaSnip",
-      "saadparwaiz1/cmp_luasnip",
-      "rafamadriz/friendly-snippets",
+    'saghen/blink.cmp',
+    version = '1.*',
+    opts = {
+      keymap = {
+        preset = 'enter',
+        ['<S-Tab>'] = { 'select_prev', 'fallback' },
+        ['<Tab>'] = { 'select_next', 'fallback' },
+      },
+      sources = {
+        default = { 'lsp', 'path', 'snippets', 'buffer' },
+      },
+      completion = {
+        accept = { auto_brackets = { enabled = false }, },
+        documentation = { auto_show = true, auto_show_delay_ms = 500 },
+      },
     },
-    config = function()
-      local cmp = require("cmp")
-      local luasnip = require("luasnip")
-
-      require("luasnip.loaders.from_vscode").lazy_load()
-
-      cmp.setup({
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
-        },
-        mapping = cmp.mapping.preset.insert({
-          ["<TAB>"] = cmp.mapping.select_next_item(),
-          ["<S-TAB>"] = cmp.mapping.select_prev_item(),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        }),
-        sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
-          { name = "buffer" },
-          { name = "path" },
-        }),
-        window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered(),
-        },
-      })
-    end,
+    opts_extend = { "sources.default" },
   },
   {
     -- none-ls: フォーマッタ/リンタ統合
