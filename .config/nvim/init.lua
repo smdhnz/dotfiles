@@ -19,6 +19,7 @@ opt.showtabline = 0
 vim.o.signcolumn = "yes"
 opt.cmdheight = 0
 opt.laststatus = 3
+vim.o.winborder = "single"
 
 -- 検索関連
 opt.smartcase = true
@@ -40,7 +41,7 @@ opt.wrap = false
 opt.fillchars = { eob = " " }
 opt.scrolloff = 10
 opt.sidescrolloff = 10
-opt.conceallevel = 3
+opt.conceallevel = 0
 
 -- ファイル関連
 opt.swapfile = false
@@ -238,7 +239,6 @@ require("lazy").setup({
       close_if_last_window = true,
       enable_git_status = true,
       enable_diagnostics = true,
-      popup_border_style = "rounded",
       window = {
         position = "float",
         mappings = {
@@ -317,9 +317,6 @@ require("lazy").setup({
     config = function()
       require("toggleterm").setup({
         direction = "float",
-        float_opts = {
-          border = "curved",
-        },
       })
 
       vim.api.nvim_create_autocmd({ "TermEnter" }, {
@@ -337,10 +334,10 @@ require("lazy").setup({
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({
-        highlight = { enable = true, disable = { "markdown" } },
+        highlight = { enable = true },
         autotag = { enable = true },
         indent = { enable = false },
-        yati = { enable = true, disable = { "markdown" } },
+        yati = { enable = true },
       })
     end,
   },
@@ -354,7 +351,6 @@ require("lazy").setup({
       vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
         vim.lsp.handlers.hover,
         {
-          border = "rounded",
           max_width = 60,
           max_height = 15,
         }
@@ -367,11 +363,6 @@ require("lazy").setup({
         underline = true,
         update_in_insert = false,
         severity_sort = true,
-        float = {
-          border = "rounded",
-          source = "always",
-          prefix = "● ",
-        },
       })
 
       -- 共通on_attach（フォーマット等）
@@ -442,46 +433,19 @@ require("lazy").setup({
     end
   },
   {
-    -- cmp補完
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-      "hrsh7th/cmp-cmdline",
-      "L3MON4D3/LuaSnip",
-      "saadparwaiz1/cmp_luasnip",
-      "rafamadriz/friendly-snippets",
+    'saghen/blink.cmp',
+    version = '1.*',
+    opts = {
+      keymap = {
+        preset = 'enter',
+        ['<S-TAB>'] = { 'select_prev', 'fallback' },
+        ['<TAB>'] = { 'select_next', 'fallback' },
+      },
+      completion = { documentation = { auto_show = true } },
+      sources = { default = { 'lsp', 'path', 'snippets', 'buffer' } },
+      fuzzy = { implementation = "prefer_rust_with_warning" },
     },
-    config = function()
-      local cmp = require("cmp")
-      local luasnip = require("luasnip")
-
-      require("luasnip.loaders.from_vscode").lazy_load()
-
-      cmp.setup({
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
-        },
-        mapping = cmp.mapping.preset.insert({
-          ["<TAB>"] = cmp.mapping.select_next_item(),
-          ["<S-TAB>"] = cmp.mapping.select_prev_item(),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        }),
-        sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
-          { name = "buffer" },
-          { name = "path" },
-        }),
-        window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered(),
-        },
-      })
-    end,
+    opts_extend = { "sources.default" },
   },
   {
     -- none-ls: フォーマッタ/リンタ統合
