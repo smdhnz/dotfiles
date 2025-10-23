@@ -3,8 +3,6 @@
 # ===========================================================================
 function activate () {
   local dir="$PWD"
-
-  # .venv を含むディレクトリを上へ辿って探す
   while [ "$dir" != "/" ]; do
     if [ -f "$dir/.venv/bin/activate" ]; then
       source "$dir/.venv/bin/activate"
@@ -12,11 +10,53 @@ function activate () {
     fi
     dir=$(dirname "$dir")
   done
-
-  # 見つからなければカレントディレクトリに新しく作成
   uv venv && source .venv/bin/activate && uv pip install isort black pyright
 }
 
+function tree() {
+    local TARGET_DIR="${1:-.}"
+    local EXCLUDE_DIRS=("node_modules" "dist" "build" ".venv" "__pycache__")
+    is_excluded() {
+        local name="$1"
+        for exclude in "${EXCLUDE_DIRS[@]}"; do
+            if [[ "$name" == "$exclude" ]]; then
+                return 0  # true
+            fi
+        done
+        return 1  # false
+    }
+    generate_tree() {
+        local DIR=$1
+        local PREFIX=$2
+        local entries=()
+        while IFS= read -r -d $'\0' entry; do
+            entries+=("$entry")
+        done < <(find "$DIR" -mindepth 1 -maxdepth 1 ! -name ".*" -print0 | sort -z)
+        local count=${#entries[@]}
+        for i in "${!entries[@]}"; do
+            local path="${entries[$i]}"
+            local name=$(basename "$path")
+            local connector="├──"
+            local new_prefix="$PREFIX│   "
+
+            if [ "$i" -eq "$((count - 1))" ]; then
+                connector="└──"
+                new_prefix="$PREFIX    "
+            fi
+
+            if [ -d "$path" ]; then
+                echo "${PREFIX}${connector} ${name}/"
+                if ! is_excluded "$name"; then
+                    generate_tree "$path" "$new_prefix"
+                fi
+            else
+                echo "${PREFIX}${connector} ${name}"
+            fi
+        done
+    }
+    echo "$(basename "$TARGET_DIR")/"
+    generate_tree "$TARGET_DIR" ""
+}
 
 function all-cat() {
   local target_dir="$1"
@@ -28,12 +68,10 @@ function all-cat() {
     echo "例: all-cat . py js ts"
     return 1
   fi
-  # 除外条件を find の -path 条件に変換
   local exclude_args=()
   for dir in "${EXCLUDED_DIRS[@]}"; do
     exclude_args+=(! -path "*/$dir/*")
   done
-  # 各拡張子についてファイル検索と出力
   for ext in "${exts[@]}"; do
     find "$target_dir" -type f -name "*.${ext}" "${exclude_args[@]}" | while read -r file; do
       echo "[${file}]"
@@ -45,56 +83,73 @@ function all-cat() {
   done
 }
 
-function tree() {
-    local dir="$1"
-    local prefix="$2"
-    local EXCLUDE_DIRS=(".venv" "node_modules" "dist" ".git" "__pycache__")
-    is_excluded() {
-        local dir_name="$1"
-        for exclude in "${EXCLUDE_DIRS[@]}"; do
-            if [ "$exclude" = "$dir_name" ]; then
-                return 0
-            fi
-        done
-        return 1
-    }
-    if [ ! -d "$dir" ]; then
-        echo "指定したパスがディレクトリではありません: $dir"
+function fixperms() {
+  local TARGET="${1:-.}"
+  local EXCLUDE_DIRS=( ".venv" )
+  local -a PRUNE_EXPR=()
+  if ((${#EXCLUDE_DIRS[@]} > 0)); then
+    PRUNE_EXPR+=( \( )
+    for dir in "${EXCLUDE_DIRS[@]}"; do
+      local d="${dir%/}"
+      PRUNE_EXPR+=( -path "$TARGET/$d" -o -path "$TARGET/$d/*" -o )
+    done
+    unset 'PRUNE_EXPR[${#PRUNE_EXPR[@]}-1]'
+    PRUNE_EXPR+=( \) -prune -o )
+  fi
+  echo "[fixperms] target: $TARGET"
+  echo "[fixperms] excludes: ${EXCLUDE_DIRS[*]:-(none)}"
+  # ディレクトリを 755
+  if ((${#PRUNE_EXPR[@]})); then
+    find "$TARGET" "${PRUNE_EXPR[@]}" -type d -exec chmod 755 {} +
+  else
+    find "$TARGET" -type d -exec chmod 755 {} +
+  fi
+  # ファイルを 644
+  if ((${#PRUNE_EXPR[@]})); then
+    find "$TARGET" "${PRUNE_EXPR[@]}" -type f -exec chmod 644 {} +
+  else
+    find "$TARGET" -type f -exec chmod 644 {} +
+  fi
+}
+
+discord() {
+    local WEBHOOK_URL="https://discord.com/api/webhooks/1430739694852898838/WoI7GIB7uM3PWTyN4FqPiBsHby_B-0RSwDRODq14Uds7FPOtJFcmW5NInOxsjVwowh8Q"
+    if [ ! -t 0 ]; then
+        CONTENT=$(cat)
+        ESCAPED=$(printf '%s' "$CONTENT" | jq -Rs .)
+        curl -s -H "Content-Type: application/json" \
+            -X POST \
+            -d "{\"content\": $ESCAPED}" \
+            "${WEBHOOK_URL}"
+        echo
         return
     fi
-    # ファイル名にスペースが含まれていても安全に処理
-    local entries=()
-    while IFS= read -r entry; do
-        entries+=("$entry")
-    done < <(ls -A "$dir")
-    local total=${#entries[@]}
-    local count=0
-    for file in "${entries[@]}"; do
-        local fullpath="$dir/$file"
-        local connector="├──"
-        local new_prefix="${prefix}│   "
-        if [ $count -eq $((total - 1)) ]; then
-            connector="└──"
-            new_prefix="${prefix}    "
-        fi
-        if is_excluded "$file"; then
-            # 除外対象 → 表示のみ（再帰しない）
-            if [ -d "$fullpath" ]; then
-                echo "${prefix}${connector} $file/"
-            else
-                echo "${prefix}${connector} $file"
-            fi
+    if [ "$1" = "-f" ]; then
+        FILE="$2"
+        if [ "$3" = "-e" ]; then
+            PASSPHRASE="$4"
+            ENC_FILE="${FILE}.gpg"
+            gpg --batch --yes --quiet --passphrase "$PASSPHRASE" -c "$FILE"
+            curl -s -X POST \
+                -F "file=@${ENC_FILE}" \
+                "${WEBHOOK_URL}" | jq
+            rm -f "$ENC_FILE"
         else
-            if [ -d "$fullpath" ]; then
-                echo "${prefix}${connector} $file/"
-                tree "$fullpath" "$new_prefix"
-            else
-                echo "${prefix}${connector} $file"
-            fi
+            curl -s -X POST \
+                -F "file=@${FILE}" \
+                "${WEBHOOK_URL}" | jq
         fi
-        count=$((count + 1))
-    done
+        return
+    fi
+    CONTENT="$*"
+    ESCAPED=$(printf '%s' "$CONTENT" | jq -Rs .)
+    curl -s -H "Content-Type: application/json" \
+        -X POST \
+        -d "{\"content\": $ESCAPED}" \
+        "${WEBHOOK_URL}"
+    echo
 }
+
 
 # ===========================================================================
 # aliases
@@ -103,7 +158,12 @@ alias vi="nvim"
 alias vim="nvim"
 alias clip="xsel -bi"
 alias open="wsl-open"
+alias pip="uv pip"
 
+
+# ===========================================================================
+# exports
+# ===========================================================================
 # volta
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"

@@ -19,7 +19,6 @@ opt.showtabline = 0
 vim.o.signcolumn = "yes"
 opt.cmdheight = 0
 opt.laststatus = 3
-vim.o.winborder = "single"
 
 -- 検索関連
 opt.smartcase = true
@@ -145,12 +144,12 @@ vim.opt.rtp:prepend(lazypath)
 -- プラグイン設定
 -- ====================
 require("lazy").setup({
-  -- plugins 一覧
   {
     -- コメントトグル
     "numToStr/Comment.nvim",
     opts = {},
   },
+
   {
     -- LazyGit
     "kdheepak/lazygit.nvim",
@@ -164,6 +163,7 @@ require("lazy").setup({
       vim.g.lazygit_floating_window_border_chars = { "", "", "", "", "", "", "", "" }
     end,
   },
+
   {
     -- Telescope (ファジー検索)
     'nvim-telescope/telescope.nvim',
@@ -196,6 +196,7 @@ require("lazy").setup({
       require("telescope").load_extension("fzf")
     end,
   },
+
   {
     -- Hop (高速移動)
     "phaazon/hop.nvim",
@@ -205,6 +206,7 @@ require("lazy").setup({
     },
     opts = { keys = "etovxqpdygfblzhckisuran" },
   },
+
   {
     -- テーマ: TokyoNight
     "folke/tokyonight.nvim",
@@ -222,6 +224,7 @@ require("lazy").setup({
       vim.cmd([[colorscheme tokyonight-night]])
     end,
   },
+
   {
     -- ファイルツリー Neo-tree
     "nvim-neo-tree/neo-tree.nvim",
@@ -269,6 +272,7 @@ require("lazy").setup({
       },
     },
   },
+
   {
     -- Git インジケーター
     "lewis6991/gitsigns.nvim",
@@ -285,6 +289,7 @@ require("lazy").setup({
       linehl = true,
     },
   },
+
   {
     -- ステータスライン
     "nvim-lualine/lualine.nvim",
@@ -306,27 +311,7 @@ require("lazy").setup({
       },
     },
   },
-  {
-    -- ターミナル統合
-    "akinsho/toggleterm.nvim",
-    lazy = true,
-    version = "*",
-    keys = {
-      { "<C-\\>", "<CMD>ToggleTerm<CR>", silent = true, noremap = true },
-    },
-    config = function()
-      require("toggleterm").setup({
-        direction = "float",
-      })
 
-      vim.api.nvim_create_autocmd({ "TermEnter" }, {
-        pattern = { "term://*toggleterm#*" },
-        callback = function()
-          vim.api.nvim_set_keymap("t", "<C-\\>", '<CMD>exe v:count1 . "ToggleTerm"<CR>', { silent = true })
-        end,
-      })
-    end,
-  },
   {
     -- Treesitter
     "nvim-treesitter/nvim-treesitter",
@@ -341,12 +326,11 @@ require("lazy").setup({
       })
     end,
   },
+
   {
     -- LSP設定
     "neovim/nvim-lspconfig",
     config = function()
-      local lspconfig = require("lspconfig")
-
       -- hoverの設定
       vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
         vim.lsp.handlers.hover,
@@ -374,16 +358,18 @@ require("lazy").setup({
         buf_map("n", "f", vim.diagnostic.open_float)
       end
 
+      local util = require("lspconfig.util")
+
       -- Pyright
-      lspconfig.pyright.setup({
+      vim.lsp.config.pyright = {
         on_attach = on_attach,
         root_dir = function(fname)
-          return require("lspconfig.util").root_pattern(".venv", ".git")(fname)
+          return util.root_pattern(".venv", ".git")(fname)
         end,
-      })
+      }
 
       -- TypeScript
-      lspconfig.ts_ls.setup({
+      vim.lsp.config.ts_ls = {
         on_attach = on_attach,
         filetypes = {
           "javascript",
@@ -393,11 +379,11 @@ require("lazy").setup({
           "html", -- Add html for Tailwind CSS
           "css", -- Add css for Tailwind CSS
         },
-        root_dir = require("lspconfig.util").root_pattern("tsconfig.json", "jsconfig.json", "package.json", ".git"),
-      })
+        root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", "package.json", ".git"),
+      }
 
       -- Tailwind CSS
-      lspconfig.tailwindcss.setup({
+      vim.lsp.config.tailwindcss = {
         on_attach = on_attach,
         filetypes = {
           "html",
@@ -407,12 +393,12 @@ require("lazy").setup({
           "typescriptreact",
           "css",
         },
-        root_dir = require("lspconfig.util").root_pattern("tailwind.config.js", "postcss.config.js", "package.json", ".git"),
-      })
+        root_dir = util.root_pattern("tailwind.config.js", "postcss.config.js", "package.json", ".git"),
+      }
 
       -- Vue
       local tsdk_path = vim.fn.expand("~/.bun/install/global/node_modules/typescript/lib")
-      lspconfig.volar.setup({
+      vim.lsp.config.volar = {
         on_attach = on_attach,
         init_options = {
           typescript = {
@@ -423,15 +409,16 @@ require("lazy").setup({
           },
         },
         single_file_support = true,
-        root_dir = require("lspconfig.util").root_pattern("vue.config.js", "nuxt.config.ts", "package.json", ".git"),
-      })
+        root_dir = util.root_pattern("vue.config.js", "nuxt.config.ts", "package.json", ".git"),
+      }
 
-      lspconfig.prismals.setup({
+      vim.lsp.config.prismals = {
         on_attach = on_attach,
         filetypes = { "prisma" },
-      })
+      }
     end
   },
+
   {
     'saghen/blink.cmp',
     version = '1.*',
@@ -441,12 +428,16 @@ require("lazy").setup({
         ['<S-TAB>'] = { 'select_prev', 'fallback' },
         ['<TAB>'] = { 'select_next', 'fallback' },
       },
-      completion = { documentation = { auto_show = true } },
+      completion = {
+        documentation = { auto_show = true },
+        list = { selection = { preselect = false, auto_insert = false } },
+      },
       sources = { default = { 'lsp', 'path', 'snippets', 'buffer' } },
       fuzzy = { implementation = "prefer_rust_with_warning" },
     },
     opts_extend = { "sources.default" },
   },
+
   {
     -- none-ls: フォーマッタ/リンタ統合
     "nvimtools/none-ls.nvim",
@@ -471,9 +462,7 @@ require("lazy").setup({
       null_ls.setup({
         sources = {
           -- Python
-          null_ls.builtins.formatting.black.with({
-            extra_args = { "--line-length", "100" },
-          }),
+          null_ls.builtins.formatting.black,
           null_ls.builtins.formatting.isort,
           -- TypeScript
           null_ls.builtins.formatting.prettierd.with({

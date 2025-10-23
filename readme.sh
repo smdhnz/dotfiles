@@ -1,7 +1,8 @@
-# Ubuntu
 sudo apt update
 sudo apt upgrade -y
 sudo apt install build-essential unzip xsel ripgrep
+
+cat "$PWD/.bashrc" >> "$HOME/.bashrc"
 
 # Bun.js
 curl -fsSL https://bun.sh/install | bash
@@ -11,8 +12,10 @@ bun add -g \
   typescript-language-server \
   @fsouza/prettierd \
   @tailwindcss/language-server \
-  @qwen-code/qwen-code \
-  @google/gemini-cli
+  @qwen-code/qwen-code
+
+mkdir -p $HOME/.qwen
+ln -sf "$PWD/.qwen/settings.json" $HOME/.qwen/settings.json
 
 # Volta
 curl https://get.volta.sh | bash
@@ -20,7 +23,6 @@ volta install node
 
 # uv
 curl -LsSf https://astral.sh/uv/install.sh | bash
-source $HOME/.local/bin/env
 
 # Git
 git config --global user.name $YOUR_USER_NAME
@@ -33,9 +35,8 @@ curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x8
 sudo rm -rf /opt/nvim
 sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
 rm nvim-linux-x86_64.tar.gz
-echo 'export PATH="$PATH:/opt/nvim-linux-x86_64/bin"' >> $HOME/.bashrc
 mkdir -p $HOME/.config/nvim
-curl -o $HOME/.config/nvim/init.lua https://raw.githubusercontent.com/smdhnz/dotfiles/main/.config/nvim/init.lua
+ln -sf "$PWD/.config/nvim/init.lua" $HOME/.config/nvim/init.lua
 nvim --headless "+Lazy! sync" +qa
 nvim --headless -c "TSInstallSync lua yaml json css typescript javascript tsx vue dockerfile prisma python" -c "qa"
 
