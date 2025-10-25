@@ -1,3 +1,5 @@
+
+
 # ===========================================================================
 # funcsions
 # ===========================================================================
@@ -177,10 +179,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # uv
 export PATH="$HOME/.local/bin/env:$PATH"
-
-# gemini cli
-export GEMINI_API_KEY="..."
-export GEMINI_MODEL="gemini-2.5-flash"
 
 # qwen coder
 export OPENAI_API_KEY="..."

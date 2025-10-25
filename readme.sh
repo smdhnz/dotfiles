@@ -2,6 +2,15 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt install build-essential unzip xsel ripgrep
 
+# Git
+git config --global user.name $YOUR_USER_NAME
+git config --global user.email $YOUR_USER_EMAIL
+ssh-keygen -t ed25519
+cat $HOME/.ssh/id_ed25519.pub # Copy & Save to github
+
+git clone git@github.com:smdhnz/dotfiles.git
+
+cd dotfiles
 cat "$PWD/.bashrc" >> "$HOME/.bashrc"
 
 # Bun.js
@@ -23,12 +32,6 @@ volta install node
 
 # uv
 curl -LsSf https://astral.sh/uv/install.sh | bash
-
-# Git
-git config --global user.name $YOUR_USER_NAME
-git config --global user.email $YOUR_USER_EMAIL
-ssh-keygen -t ed25519
-cat $HOME/.ssh/id_ed25519.pub # Copy & Save to github
 
 # Neovim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
