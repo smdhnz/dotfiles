@@ -358,64 +358,56 @@ require("lazy").setup({
         buf_map("n", "f", vim.diagnostic.open_float)
       end
 
-      local util = require("lspconfig.util")
-
       -- Pyright
-      vim.lsp.config.pyright = {
+      vim.lsp.config("pyright", {
         on_attach = on_attach,
-        root_dir = function(fname)
-          return util.root_pattern(".venv", ".git")(fname)
-        end,
-      }
-
-      -- TypeScript
-      vim.lsp.config.ts_ls = {
-        on_attach = on_attach,
-        filetypes = {
-          "javascript",
-          "javascriptreact",
-          "typescript",
-          "typescriptreact",
-          "html", -- Add html for Tailwind CSS
-          "css", -- Add css for Tailwind CSS
-        },
-        root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", "package.json", ".git"),
-      }
+        filetypes = { "python" },
+        root_markers = { ".venv" },
+      })
+      vim.lsp.enable("pyright")
 
       -- Tailwind CSS
-      vim.lsp.config.tailwindcss = {
+      vim.lsp.config("tailwindcss", {
         on_attach = on_attach,
         filetypes = {
-          "html",
-          "javascript",
-          "javascriptreact",
-          "typescript",
           "typescriptreact",
+          "vue",
+          "html",
           "css",
         },
-        root_dir = util.root_pattern("tailwind.config.js", "postcss.config.js", "package.json", ".git"),
-      }
+        root_markers = { 'tailwind.config.js', 'postcss.config.js' },
+      })
+      vim.lsp.enable("tailwindcss")
 
-      -- Vue
-      local tsdk_path = vim.fn.expand("~/.bun/install/global/node_modules/typescript/lib")
-      vim.lsp.config.volar = {
+      -- Typescript & Vue
+      local vue_language_server_path = os.getenv("HOME")
+        .. "/.bun/install/global/node_modules/@vue/typescript-plugin"
+      local vue_plugin = {
+        name = "@vue/typescript-plugin",
+        location = vue_language_server_path,
+        languages = { "vue" },
+        configNamespace = "typescript",
+      }
+      vim.lsp.config("vtsls", {
         on_attach = on_attach,
-        init_options = {
-          typescript = {
-            tsdk = tsdk_path,
-          },
-          vue = {
-            hybridMode = false,
+        root_markers = { "package.json", "tsconfig.json" },
+        workspace_required = true,
+        settings = {
+          vtsls = {
+            tsserver = {
+              globalPlugins = {
+                vue_plugin,
+              },
+            },
           },
         },
-        single_file_support = true,
-        root_dir = util.root_pattern("vue.config.js", "nuxt.config.ts", "package.json", ".git"),
-      }
-
-      vim.lsp.config.prismals = {
-        on_attach = on_attach,
-        filetypes = { "prisma" },
-      }
+        filetypes = {
+          "typescript",
+          "typescriptreact",
+          "vue",
+        },
+      })
+      vim.lsp.enable("vtsls")
     end
   },
 
@@ -430,7 +422,7 @@ require("lazy").setup({
       },
       completion = {
         documentation = { auto_show = true },
-        list = { selection = { preselect = false, auto_insert = false } },
+        list = { selection = { preselect = false, auto_insert = true } },
       },
       sources = { default = { 'lsp', 'path', 'snippets', 'buffer' } },
       fuzzy = { implementation = "prefer_rust_with_warning" },
@@ -466,7 +458,16 @@ require("lazy").setup({
           null_ls.builtins.formatting.isort,
           -- TypeScript
           null_ls.builtins.formatting.prettierd.with({
-            filetypes = { "javascript", "typescript", "typescriptreact", "json", "css", "html", "yaml", "markdown" }
+            filetypes = {
+              "typescript",
+              "typescriptreact",
+              "vue",
+              "json",
+              "yaml",
+              "css",
+              "html",
+              "markdown",
+            }
           }),
         },
         on_attach = function(client, bufnr)

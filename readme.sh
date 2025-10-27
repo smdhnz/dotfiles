@@ -18,7 +18,8 @@ curl -fsSL https://bun.sh/install | bash
 bun add -g \
   wsl-open \
   typescript \
-  typescript-language-server \
+  @vtsls/language-server \
+  @vue/language-server \
   @fsouza/prettierd \
   @tailwindcss/language-server \
   @qwen-code/qwen-code
@@ -41,7 +42,7 @@ rm nvim-linux-x86_64.tar.gz
 mkdir -p $HOME/.config/nvim
 ln -sf "$PWD/.config/nvim/init.lua" $HOME/.config/nvim/init.lua
 nvim --headless "+Lazy! sync" +qa
-nvim --headless -c "TSInstallSync lua yaml json css typescript javascript tsx vue dockerfile prisma python" -c "qa"
+nvim --headless -c "TSInstallSync lua json yaml typescript tsx vue dockerfile prisma python" -c "qa"
 
 # Lazygit
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
