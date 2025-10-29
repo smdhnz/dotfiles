@@ -381,7 +381,7 @@ require("lazy").setup({
 
       -- Typescript & Vue
       local vue_language_server_path = os.getenv("HOME")
-        .. "/.bun/install/global/node_modules/@vue/typescript-plugin"
+        .. "/.volta/tools/shared/@vue/language-server/node_modules/@vue/typescript-plugin"
       local vue_plugin = {
         name = "@vue/typescript-plugin",
         location = vue_language_server_path,

@@ -13,23 +13,20 @@ git clone git@github.com:smdhnz/dotfiles.git
 cd dotfiles
 cat "$PWD/.bashrc" >> "$HOME/.bashrc"
 
-# Bun.js
-curl -fsSL https://bun.sh/install | bash
-bun add -g \
+# Volta
+curl https://get.volta.sh | bash
+volta install node
+volta install \
   wsl-open \
   typescript \
   @vtsls/language-server \
   @vue/language-server \
   @fsouza/prettierd \
   @tailwindcss/language-server \
-  @qwen-code/qwen-code
+  cline
 
-mkdir -p $HOME/.qwen
-ln -sf "$PWD/.qwen/settings.json" $HOME/.qwen/settings.json
-
-# Volta
-curl https://get.volta.sh | bash
-volta install node
+# Bun.js
+curl -fsSL https://bun.sh/install | bash
 
 # uv
 curl -LsSf https://astral.sh/uv/install.sh | bash
@@ -40,7 +37,7 @@ sudo rm -rf /opt/nvim
 sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
 rm nvim-linux-x86_64.tar.gz
 mkdir -p $HOME/.config/nvim
-ln -sf "$PWD/.config/nvim/init.lua" $HOME/.config/nvim/init.lua
+ln -sf "$PWD/init.lua" $HOME/.config/nvim/init.lua
 nvim --headless "+Lazy! sync" +qa
 nvim --headless -c "TSInstallSync lua json yaml typescript tsx vue dockerfile prisma python" -c "qa"
 
