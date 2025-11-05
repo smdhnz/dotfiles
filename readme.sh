@@ -16,17 +16,17 @@ cat "$PWD/.bashrc" >> "$HOME/.bashrc"
 # Volta
 curl https://get.volta.sh | bash
 volta install node
-volta install \
+
+# Bun.js
+curl -fsSL https://bun.sh/install | bash
+bun install -g \
   wsl-open \
   typescript \
   @vtsls/language-server \
   @vue/language-server \
   @fsouza/prettierd \
   @tailwindcss/language-server \
-  cline
-
-# Bun.js
-curl -fsSL https://bun.sh/install | bash
+  @charmland/crush
 
 # uv
 curl -LsSf https://astral.sh/uv/install.sh | bash
