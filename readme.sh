@@ -28,9 +28,6 @@ bun install -g \
   @tailwindcss/language-server \
   @charmland/crush
 
-mkdir -p $HOME/.config/crush
-ln -sf "$PWD/crush.json" $HOME/.config/crush/crush.json
-
 # uv
 curl -LsSf https://astral.sh/uv/install.sh | bash
 
@@ -39,8 +36,6 @@ curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x8
 sudo rm -rf /opt/nvim
 sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
 rm nvim-linux-x86_64.tar.gz
-mkdir -p $HOME/.config/nvim
-ln -sf "$PWD/init.lua" $HOME/.config/nvim/init.lua
 nvim --headless "+Lazy! sync" +qa
 nvim --headless -c "TSInstallSync lua json yaml typescript tsx vue dockerfile prisma python" -c "qa"
 
