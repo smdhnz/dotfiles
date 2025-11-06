@@ -28,6 +28,9 @@ bun install -g \
   @tailwindcss/language-server \
   @charmland/crush
 
+mkdir -p $HOME/.config/crush
+ln -sf "$PWD/crush.json" $HOME/.config/crush/crush.json
+
 # uv
 curl -LsSf https://astral.sh/uv/install.sh | bash
 

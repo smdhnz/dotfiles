@@ -166,21 +166,12 @@ alias pip="uv pip"
 # ===========================================================================
 # exports
 # ===========================================================================
-# volta
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
-
-# neovim
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
-
-# bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-
-# uv
 export PATH="$HOME/.local/bin/env:$PATH"
 
-# qwen coder
-export OPENAI_API_KEY="..."
-export OPENAI_BASE_URL="https://openrouter.ai/api/v1"
-export OPENAI_MODEL="x-ai/grok-code-fast-1"
+export BRAVE_API_KEY=""
+export OPENROUTER_API_KEY=""
