@@ -26,6 +26,7 @@ bun install -g \
   @vue/language-server \
   @fsouza/prettierd \
   @tailwindcss/language-server \
+  @google/gemini-cli \
   @charmland/crush
 
 # uv
