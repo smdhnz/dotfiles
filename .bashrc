@@ -3,6 +3,32 @@
 # ===========================================================================
 # funcsions
 # ===========================================================================
+br-sync() {
+  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "⚠️  Not inside a Git repository. Skipping git_force_sync."
+    return 1
+  fi
+
+  if [ -z "$1" ]; then
+    # 引数なし → 現在のブランチを同期するモード
+    local branch_name
+    branch_name=$(git rev-parse --abbrev-ref HEAD)
+
+    echo "==> Forcing current branch '$branch_name' to match origin/$branch_name"
+    git stash push -m "WIP: 変更一時退避"
+    git fetch origin
+    git reset --hard origin/"$branch_name"
+    git stash pop
+  else
+    # 引数あり → 指定ブランチを `branch -f` で強制同期するモード
+    local target_branch="$1"
+
+    echo "==> Forcing branch '$target_branch' to match origin/$target_branch"
+    git fetch origin
+    git branch -f "$target_branch" origin/"$target_branch"
+  fi
+}
+
 function activate () {
   local dir="$PWD"
   while [ "$dir" != "/" ]; do
@@ -60,29 +86,89 @@ function tree() {
     generate_tree "$TARGET_DIR" ""
 }
 
-function all-cat() {
-  local target_dir="$1"
-  local EXCLUDE_DIRS=(".venv" "node_modules" "dist" ".git" "__pycache__")
-  shift
-  local exts=("$@")
-  if [[ -z "$target_dir" || "${#exts[@]}" -eq 0 ]]; then
-    echo "使い方: all-cat <検索ディレクトリ> <拡張子1> [拡張子2] ..."
-    echo "例: all-cat . py js ts"
+function xcat() {
+  # ==============================================================================
+  # [使い方]
+  #   xcat <パス1> [パス2...] [--exp <拡張子1,拡張子2...>]
+  #
+  # [例]
+  #   1. 特定の拡張子のみ:  xcat src/ --exp py,js
+  #   2. ディレクトリ全体:  xcat .
+  #   3. 特定ファイル指定:  xcat README.md ./config/
+  #
+  # [特徴]
+  #   - ファイル名をヘッダーに、中身をMarkdownコードブロック (```) で出力します。
+  #   - node_modules, .git, .venv などの不要フォルダは自動的に除外されます。
+  # ==============================================================================
+  local EXCLUDE_DIRS=(".venv" "node_modules" "dist" ".git" "__pycache__" "test" ".DS_Store" ".idea" ".vscode")
+
+  local target_paths=()
+  local extensions=""
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --exp)
+        if [[ -z "$2" || "$2" == -* ]]; then
+          echo "エラー: --exp の後には拡張子を指定してください (例: py,js)"
+          return 1
+        fi
+        extensions="$2"
+        shift 2
+        ;;
+      *)
+        target_paths+=("$1")
+        shift
+        ;;
+    esac
+  done
+
+  if [[ ${#target_paths[@]} -eq 0 ]]; then
+    echo "Usage: xcat <パス1> [パス2...] [--exp <拡張子1,拡張子2...>]"
+    echo "  例1: xcat functions/* --exp py"
     return 1
   fi
-  local exclude_args=()
-  for dir in "${EXCLUDED_DIRS[@]}"; do
-    exclude_args+=(! -path "*/$dir/*")
+
+  print_formatted() {
+    local file="$1"
+    echo "[${file}]"
+    local ext="${file##*.}"
+    if [[ "$file" == "$ext" ]]; then ext=""; fi
+    echo "\`\`\`${ext}"
+    cat "$file"
+    echo "\`\`\`"
+    echo ""
+  }
+
+local find_opts=()
+
+for dir in "${EXCLUDE_DIRS[@]}"; do
+  find_opts+=(! -path "*/$dir/*")
+done
+
+if [[ -n "$extensions" ]]; then
+  local ext_args=()
+  ext_args+=(\() # 括弧開始
+
+  IFS=',' read -ra ADDR <<< "$extensions"
+  local is_first=true
+
+  for ext in "${ADDR[@]}"; do
+    if [ "$is_first" = true ]; then
+      is_first=false
+    else
+      ext_args+=(-o)
+    fi
+    ext_args+=(-name "*.${ext}")
   done
-  for ext in "${exts[@]}"; do
-    find "$target_dir" -type f -name "*.${ext}" "${exclude_args[@]}" | while read -r file; do
-      echo "[${file}]"
-      echo "\`\`\`${ext}"
-      cat "$file"
-      echo "\`\`\`"
-      echo ""
-    done
-  done
+
+  ext_args+=(\)) # 括弧終了
+  find_opts+=("${ext_args[@]}")
+fi
+
+find "${target_paths[@]}" -type f "${find_opts[@]}" | while read -r file; do
+print_formatted "$file"
+done
+unset -f print_formatted
 }
 
 function fixperms() {
@@ -115,41 +201,51 @@ function fixperms() {
 }
 
 discord() {
-    local WEBHOOK_URL="https://discord.com/api/webhooks/1430739694852898838/WoI7GIB7uM3PWTyN4FqPiBsHby_B-0RSwDRODq14Uds7FPOtJFcmW5NInOxsjVwowh8Q"
-    if [ ! -t 0 ]; then
-        CONTENT=$(cat)
-        ESCAPED=$(printf '%s' "$CONTENT" | jq -Rs .)
-        curl -s -H "Content-Type: application/json" \
-            -X POST \
-            -d "{\"content\": $ESCAPED}" \
-            "${WEBHOOK_URL}"
-        echo
-        return
-    fi
-    if [ "$1" = "-f" ]; then
-        FILE="$2"
-        if [ "$3" = "-e" ]; then
-            PASSPHRASE="$4"
-            ENC_FILE="${FILE}.gpg"
-            gpg --batch --yes --quiet --passphrase "$PASSPHRASE" -c "$FILE"
-            curl -s -X POST \
-                -F "file=@${ENC_FILE}" \
-                "${WEBHOOK_URL}" | jq
-            rm -f "$ENC_FILE"
-        else
-            curl -s -X POST \
-                -F "file=@${FILE}" \
-                "${WEBHOOK_URL}" | jq
-        fi
-        return
-    fi
-    CONTENT="$*"
+  # ==============================================================================
+  # [使い方]
+  #   1. メッセージ送信: discord "メッセージ内容"
+  #   2. パイプ/ログ送信: echo "エラー発生" | discord
+  #   3. ファイル送信:   discord -f <ファイルパス>
+  #   4. 暗号化して送信: discord -f <ファイルパス> -e "<パスフレーズ>"
+  #
+  # [必須コマンド]
+  #   curl, jq, gpg
+  # ==============================================================================
+  local WEBHOOK_URL="https://discord.com/api/webhooks/1430739694852898838/WoI7GIB7uM3PWTyN4FqPiBsHby_B-0RSwDRODq14Uds7FPOtJFcmW5NInOxsjVwowh8Q"
+  if [ ! -t 0 ]; then
+    CONTENT=$(cat)
     ESCAPED=$(printf '%s' "$CONTENT" | jq -Rs .)
     curl -s -H "Content-Type: application/json" \
-        -X POST \
-        -d "{\"content\": $ESCAPED}" \
-        "${WEBHOOK_URL}"
+      -X POST \
+      -d "{\"content\": $ESCAPED}" \
+      "${WEBHOOK_URL}"
     echo
+    return
+  fi
+  if [ "$1" = "-f" ]; then
+    FILE="$2"
+    if [ "$3" = "-e" ]; then
+      PASSPHRASE="$4"
+      ENC_FILE="${FILE}.gpg"
+      gpg --batch --yes --quiet --passphrase "$PASSPHRASE" -c "$FILE"
+      curl -s -X POST \
+        -F "file=@${ENC_FILE}" \
+        "${WEBHOOK_URL}" | jq
+      rm -f "$ENC_FILE"
+    else
+      curl -s -X POST \
+        -F "file=@${FILE}" \
+        "${WEBHOOK_URL}" | jq
+    fi
+    return
+  fi
+  CONTENT="$*"
+  ESCAPED=$(printf '%s' "$CONTENT" | jq -Rs .)
+  curl -s -H "Content-Type: application/json" \
+    -X POST \
+    -d "{\"content\": $ESCAPED}" \
+    "${WEBHOOK_URL}"
+  echo
 }
 
 
@@ -172,6 +268,3 @@ export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 export PATH="$HOME/.local/bin/env:$PATH"
-
-export BRAVE_API_KEY=""
-export OPENROUTER_API_KEY=""
