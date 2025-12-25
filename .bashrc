@@ -42,48 +42,48 @@ function activate () {
 }
 
 function tree() {
-    local TARGET_DIR="${1:-.}"
-    local EXCLUDE_DIRS=("node_modules" "dist" "build" ".venv" "__pycache__")
-    is_excluded() {
-        local name="$1"
-        for exclude in "${EXCLUDE_DIRS[@]}"; do
-            if [[ "$name" == "$exclude" ]]; then
-                return 0  # true
-            fi
-        done
-        return 1  # false
-    }
-    generate_tree() {
-        local DIR=$1
-        local PREFIX=$2
-        local entries=()
-        while IFS= read -r -d $'\0' entry; do
-            entries+=("$entry")
-        done < <(find "$DIR" -mindepth 1 -maxdepth 1 ! -name ".*" -print0 | sort -z)
-        local count=${#entries[@]}
-        for i in "${!entries[@]}"; do
-            local path="${entries[$i]}"
-            local name=$(basename "$path")
-            local connector="├──"
-            local new_prefix="$PREFIX│   "
+  local TARGET_DIR="${1:-.}"
+  local EXCLUDE_DIRS=("node_modules" "dist" "build" ".venv" "__pycache__")
+  is_excluded() {
+    local name="$1"
+    for exclude in "${EXCLUDE_DIRS[@]}"; do
+      if [[ "$name" == "$exclude" ]]; then
+        return 0  # true
+      fi
+    done
+    return 1  # false
+  }
+generate_tree() {
+  local DIR=$1
+  local PREFIX=$2
+  local entries=()
+  while IFS= read -r -d $'\0' entry; do
+    entries+=("$entry")
+  done < <(find "$DIR" -mindepth 1 -maxdepth 1 ! -name ".*" -print0 | sort -z)
+  local count=${#entries[@]}
+    for i in "${!entries[@]}"; do
+      local path="${entries[$i]}"
+      local name=$(basename "$path")
+      local connector="├──"
+      local new_prefix="$PREFIX│   "
 
-            if [ "$i" -eq "$((count - 1))" ]; then
-                connector="└──"
-                new_prefix="$PREFIX    "
-            fi
+      if [ "$i" -eq "$((count - 1))" ]; then
+        connector="└──"
+        new_prefix="$PREFIX    "
+      fi
 
-            if [ -d "$path" ]; then
-                echo "${PREFIX}${connector} ${name}/"
-                if ! is_excluded "$name"; then
-                    generate_tree "$path" "$new_prefix"
-                fi
-            else
-                echo "${PREFIX}${connector} ${name}"
-            fi
-        done
-    }
-    echo "$(basename "$TARGET_DIR")/"
-    generate_tree "$TARGET_DIR" ""
+      if [ -d "$path" ]; then
+        echo "${PREFIX}${connector} ${name}/"
+        if ! is_excluded "$name"; then
+          generate_tree "$path" "$new_prefix"
+        fi
+      else
+        echo "${PREFIX}${connector} ${name}"
+      fi
+    done
+  }
+echo "$(basename "$TARGET_DIR")/"
+generate_tree "$TARGET_DIR" ""
 }
 
 function xcat() {
@@ -182,7 +182,7 @@ function fixperms() {
       PRUNE_EXPR+=( -path "$TARGET/$d" -o -path "$TARGET/$d/*" -o )
     done
     unset 'PRUNE_EXPR[${#PRUNE_EXPR[@]}-1]'
-    PRUNE_EXPR+=( \) -prune -o )
+      PRUNE_EXPR+=( \) -prune -o )
   fi
   echo "[fixperms] target: $TARGET"
   echo "[fixperms] excludes: ${EXCLUDE_DIRS[*]:-(none)}"
@@ -249,6 +249,42 @@ discord() {
 }
 
 
+# 安全な削除関数: del
+function del() {
+  local trash_dir="$HOME/.deleted/$(date +%Y-%m-%d)"
+
+  # ゴミ箱ディレクトリの作成
+  mkdir -p "$trash_dir"
+
+  # 引数がない場合はヘルプを表示
+  if [ $# -eq 0 ]; then
+    echo "Usage: del <file_or_dir> ..."
+    return 1
+  fi
+
+  for item in "$@"; do
+    # オプション（-rfなど）はスキップ
+    [[ "$item" == -* ]] && continue
+
+    if [ -e "$item" ]; then
+      # 同名ファイルがある場合はタイムスタンプを付与して衝突回避
+      local base_name=$(basename "$item")
+      local dest="$trash_dir/$base_name"
+
+      if [ -e "$dest" ]; then
+        dest="${dest}_$(date +%H%M%S)"
+      fi
+
+      # 移動実行
+      mv "$item" "$dest"
+      echo "Moved to trash: $item"
+    else
+      echo "del: $item: No such file or directory"
+    fi
+  done
+}
+
+
 # ===========================================================================
 # aliases
 # ===========================================================================
@@ -257,6 +293,7 @@ alias vim="nvim"
 alias clip="xsel -bi"
 alias open="wsl-open"
 alias pip="uv pip"
+alias rm='del'
 
 
 # ===========================================================================
