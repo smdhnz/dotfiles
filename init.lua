@@ -315,6 +315,7 @@ require("lazy").setup({
   {
     -- Treesitter
     "nvim-treesitter/nvim-treesitter",
+    branch = "master",
     dependencies = { "yioneko/nvim-yati" },
     build = ":TSUpdate",
     config = function()

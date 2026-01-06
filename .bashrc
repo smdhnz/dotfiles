@@ -294,6 +294,8 @@ alias clip="xsel -bi"
 alias open="wsl-open"
 alias pip="uv pip"
 alias rm='del'
+alias lg="lazygit"
+alias ld="lazydocker"
 
 
 # ===========================================================================
