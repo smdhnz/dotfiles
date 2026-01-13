@@ -243,19 +243,21 @@ require("lazy").setup({
           return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
         end
 
+        local function toggle_all_filters()
+          api.tree.toggle_hidden_filter()
+          api.tree.toggle_custom_filter()
+        end
+
         -- デフォルトは読み込まず、J, K などのグローバル設定を透過させる
         -- api.config.mappings.default_on_attach(bufnr)
 
-        -- 厳選した操作のみ定義
         vim.keymap.set("n", "<CR>", api.node.open.edit,          opts("Open"))
         vim.keymap.set("n", "e",     api.tree.close,              opts("Close"))
-        vim.keymap.set("n", ".",     api.tree.toggle_custom_filter, opts("Toggle Filter"))
+        vim.keymap.set("n", ".",     toggle_all_filters,          opts("Toggle All Filters"))
         vim.keymap.set("n", "q",     api.tree.close,              opts("Close"))
         vim.keymap.set("n", "s",     api.node.open.vertical,      opts("Open: Vertical Split"))
         vim.keymap.set("n", "u",     api.tree.change_root_to_parent, opts("Up"))
         vim.keymap.set("n", "o",     api.tree.change_root_to_node,   opts("CD"))
-
-        -- ファイル操作
         vim.keymap.set("n", "a",     api.fs.create,               opts("Create"))
         vim.keymap.set("n", "d",     api.fs.remove,               opts("Delete"))
         vim.keymap.set("n", "r",     api.fs.rename,               opts("Rename"))
@@ -296,6 +298,7 @@ require("lazy").setup({
           },
         },
         renderer = {
+          special_files = {},
           highlight_git = true,
           indent_markers = { enable = true },
           icons = {
@@ -313,11 +316,12 @@ require("lazy").setup({
           },
         },
         filters = {
-          custom = { "node_modules", ".git", ".nuxt", ".output", "__pycache__", ".venv" },
+          dotfiles = true,
+          custom = { "node_modules", ".git", ".nuxt", ".output", "__pycache__", ".venv", ".gemini" },
         },
         actions = {
           open_file = {
-            quit_on_open = true, -- フロートなので開いたら閉じる
+            quit_on_open = true,
             window_picker = { enable = false },
           },
         },
