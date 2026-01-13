@@ -226,51 +226,103 @@ require("lazy").setup({
   },
 
   {
-    -- ファイルツリー Neo-tree
-    "nvim-neo-tree/neo-tree.nvim",
-    lazy = true,
-    branch = "v3.x",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons",
-      "MunifTanjim/nui.nvim",
-    },
+    "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     keys = {
-      { "e", "<CMD>Neotree<CR>", silent = true, noremap = true },
+      { "e", "<CMD>NvimTreeToggle<CR>", silent = true, noremap = true },
     },
-    opts = {
-      close_if_last_window = true,
-      enable_git_status = true,
-      enable_diagnostics = true,
-      window = {
-        position = "float",
-        mappings = {
-          ["<space>"] = { "toggle_node", nowait = false },
-          ["a"] = { "add", config = { show_path = "relative" } },
-          ["d"] = "delete",
-          ["m"] = "move",
-          ["y"] = "copy_to_clipboard",
-          ["x"] = "cut_to_clipboard",
-          ["p"] = "paste_from_clipboard",
-          ["e"] = "close_window",
-          ["<"] = "prev_source",
-          [">"] = "next_source",
-        },
-      },
-      filesystem = {
-        filtered_items = {
-          hide_by_name = { "node_modules", "__pycache__" },
-          hide_gitignored = false,
-        },
-        window = {
-          mappings = {
-            ["."] = "toggle_hidden",
-            ["u"] = "navigate_up",
-            ["o"] = "set_root",
+    config = function()
+      -- ==========================================
+      -- 1. カスタムキーマップ (J, K などのグローバル優先)
+      -- ==========================================
+      local function my_on_attach(bufnr)
+        local api = require("nvim-tree.api")
+        local function opts(desc)
+          return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+        end
+
+        -- デフォルトは読み込まず、J, K などのグローバル設定を透過させる
+        -- api.config.mappings.default_on_attach(bufnr)
+
+        -- 厳選した操作のみ定義
+        vim.keymap.set("n", "<CR>", api.node.open.edit,          opts("Open"))
+        vim.keymap.set("n", "e",     api.tree.close,              opts("Close"))
+        vim.keymap.set("n", ".",     api.tree.toggle_custom_filter, opts("Toggle Filter"))
+        vim.keymap.set("n", "q",     api.tree.close,              opts("Close"))
+        vim.keymap.set("n", "s",     api.node.open.vertical,      opts("Open: Vertical Split"))
+        vim.keymap.set("n", "u",     api.tree.change_root_to_parent, opts("Up"))
+        vim.keymap.set("n", "o",     api.tree.change_root_to_node,   opts("CD"))
+
+        -- ファイル操作
+        vim.keymap.set("n", "a",     api.fs.create,               opts("Create"))
+        vim.keymap.set("n", "d",     api.fs.remove,               opts("Delete"))
+        vim.keymap.set("n", "r",     api.fs.rename,               opts("Rename"))
+        vim.keymap.set("n", "x",     api.fs.cut,                  opts("Cut"))
+        vim.keymap.set("n", "c",     api.fs.copy.node,            opts("Copy"))
+        vim.keymap.set("n", "p",     api.fs.paste,                opts("Paste"))
+      end
+
+      -- ==========================================
+      -- 2. 本体設定 (レスポンシブ・フロート)
+      -- ==========================================
+      require("nvim-tree").setup({
+        on_attach = my_on_attach,
+        update_focused_file = { enable = true },
+        view = {
+          float = {
+            enable = true,
+            quit_on_focus_loss = true,
+            open_win_config = function()
+              local screen_w = vim.opt.columns:get()
+              local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
+
+              local window_w = math.floor(screen_w * 0.4)
+              local window_h = math.floor(screen_h * 0.8)
+
+              local center_x = (screen_w - window_w) / 2
+              local center_y = ((vim.opt.lines:get() - window_h) / 2) - vim.opt.cmdheight:get()
+
+              return {
+                relative = "editor",
+                border = "rounded",
+                width = window_w,
+                height = window_h,
+                row = center_y,
+                col = center_x,
+              }
+            end,
           },
         },
-      },
-    },
+        renderer = {
+          highlight_git = true,
+          indent_markers = { enable = true },
+          icons = {
+            glyphs = {
+              git = {
+                unstaged  = "", -- 小さなドット（変更あり）
+                staged    = "", -- チェックボックス
+                unmerged  = "", 
+                renamed   = "󰑖", -- 回転矢印（リネーム）
+                untracked = "", -- 疑問符（未追跡）
+                deleted   = "", -- マイナス
+                ignored   = "", -- 進入禁止
+              },
+            },
+          },
+        },
+        filters = {
+          custom = { "node_modules", ".git", ".nuxt", ".output", "__pycache__", ".venv" },
+        },
+        actions = {
+          open_file = {
+            quit_on_open = true, -- フロートなので開いたら閉じる
+            window_picker = { enable = false },
+          },
+        },
+      })
+    end,
   },
 
   {
@@ -382,7 +434,7 @@ require("lazy").setup({
 
       -- Typescript & Vue
       local vue_language_server_path = os.getenv("HOME")
-        .. ".volta/tools/shared/@vue/language-server/node_modules/@vue/typescript-plugin"
+        .. "/.volta/tools/shared/@vue/language-server/node_modules/@vue/typescript-plugin"
       local vue_plugin = {
         name = "@vue/typescript-plugin",
         location = vue_language_server_path,
@@ -480,4 +532,3 @@ require("lazy").setup({
     end,
   },
 })
-
