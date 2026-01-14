@@ -1,4 +1,11 @@
 -- ====================
+-- 高速化: バイトコードキャッシュ有効化
+-- ====================
+if vim.loader then
+  vim.loader.enable()
+end
+
+-- ====================
 -- Leader キーの設定
 -- ====================
 vim.g.mapleader = " "
@@ -151,20 +158,6 @@ require("lazy").setup({
   },
 
   {
-    -- LazyGit
-    "kdheepak/lazygit.nvim",
-    lazy = true,
-    keys = {
-      { "q", "<CMD>LazyGit<CR>", silent = true, noremap = true },
-    },
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      vim.g.lazygit_floating_window_scaling_factor = 1
-      vim.g.lazygit_floating_window_border_chars = { "", "", "", "", "", "", "", "" }
-    end,
-  },
-
-  {
     -- Telescope (ファジー検索)
     'nvim-telescope/telescope.nvim',
     branch = "0.1.x",
@@ -172,10 +165,11 @@ require("lazy").setup({
       'nvim-lua/plenary.nvim',
       { 'nvim-telescope/telescope-fzf-native.nvim', build = "make" }
     },
+    cmd = { "Telescope" },
+    keys = {
+      { "<C-f>", "<CMD>Telescope live_grep<CR>", silent = true, noremap = true },
+    },
     config = function()
-      local keymap = vim.api.nvim_set_keymap
-      keymap("n", "<C-f>", "<CMD>Telescope live_grep<CR>", { silent = true, noremap = true })
-
       require("telescope").setup({
         defaults = {
           file_ignore_patterns = { "^.git/", "^.venv/", "^node_modules/" },
@@ -194,6 +188,20 @@ require("lazy").setup({
         },
       })
       require("telescope").load_extension("fzf")
+    end,
+  },
+
+  {
+    -- LazyGit
+    "kdheepak/lazygit.nvim",
+    lazy = true,
+    keys = {
+      { "q", "<CMD>LazyGit<CR>", silent = true, noremap = true },
+    },
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      vim.g.lazygit_floating_window_scaling_factor = 1
+      vim.g.lazygit_floating_window_border_chars = { "", "", "", "", "", "", "", "" }
     end,
   },
 
@@ -235,7 +243,53 @@ require("lazy").setup({
     },
     config = function()
       -- ==========================================
-      -- 1. カスタムキーマップ (J, K などのグローバル優先)
+      -- 1. 無視ファイルリスト
+      -- ==========================================
+      local custom_ignore_list = {
+        "node_modules",
+        ".git",
+        ".nuxt",
+        ".output",
+        "__pycache__",
+        ".venv",
+        ".gemini"
+      }
+
+      -- ==========================================
+      -- 2. ハイライト自動適用 (BufWinEnterを追加)
+      -- ==========================================
+      vim.api.nvim_create_autocmd({ "BufWinEnter", "FileType" }, {
+        pattern = "*",
+        callback = function()
+          if vim.bo.filetype ~= "NvimTree" then
+            return
+          end
+
+          -- 描画タイミングのズレを防ぐために schedule でラップ
+          vim.schedule(function()
+            -- 念のため既存の match をクリア（重複防止）
+            vim.fn.clearmatches()
+
+            -- A. ドットファイル (.config など) をグレーアウト
+            vim.fn.matchadd("Comment", [[ \zs\.[^ ]\+]])
+
+            -- B. custom_ignore_list を正規表現に変換してグレーアウト
+            local escaped_list = {}
+            for _, name in ipairs(custom_ignore_list) do
+              table.insert(escaped_list, vim.fn.escape(name, "."))
+            end
+            local pattern = table.concat(escaped_list, "\\|")
+
+            if pattern ~= "" then
+              -- 正規表現: スペースの後にリスト内の単語があり、その直後が行末かスペース
+              vim.fn.matchadd("Comment", [[ \zs\(]] .. pattern .. [[\)\ze\($\| \)]])
+            end
+          end)
+        end,
+      })
+
+      -- ==========================================
+      -- 3. カスタムキーマップ
       -- ==========================================
       local function my_on_attach(bufnr)
         local api = require("nvim-tree.api")
@@ -246,28 +300,26 @@ require("lazy").setup({
         local function toggle_all_filters()
           api.tree.toggle_hidden_filter()
           api.tree.toggle_custom_filter()
+          api.tree.toggle_gitignore_filter()
         end
 
-        -- デフォルトは読み込まず、J, K などのグローバル設定を透過させる
-        -- api.config.mappings.default_on_attach(bufnr)
-
-        vim.keymap.set("n", "<CR>", api.node.open.edit,          opts("Open"))
-        vim.keymap.set("n", "e",     api.tree.close,              opts("Close"))
-        vim.keymap.set("n", ".",     toggle_all_filters,          opts("Toggle All Filters"))
-        vim.keymap.set("n", "q",     api.tree.close,              opts("Close"))
-        vim.keymap.set("n", "s",     api.node.open.vertical,      opts("Open: Vertical Split"))
-        vim.keymap.set("n", "u",     api.tree.change_root_to_parent, opts("Up"))
-        vim.keymap.set("n", "o",     api.tree.change_root_to_node,   opts("CD"))
-        vim.keymap.set("n", "a",     api.fs.create,               opts("Create"))
-        vim.keymap.set("n", "d",     api.fs.remove,               opts("Delete"))
-        vim.keymap.set("n", "r",     api.fs.rename,               opts("Rename"))
-        vim.keymap.set("n", "x",     api.fs.cut,                  opts("Cut"))
-        vim.keymap.set("n", "c",     api.fs.copy.node,            opts("Copy"))
-        vim.keymap.set("n", "p",     api.fs.paste,                opts("Paste"))
+        vim.keymap.set("n", "<CR>", api.node.open.edit,           opts("Open"))
+        vim.keymap.set("n", "e",    api.tree.close,               opts("Close"))
+        vim.keymap.set("n", ".",    toggle_all_filters,           opts("Toggle All Filters"))
+        vim.keymap.set("n", "q",    api.tree.close,               opts("Close"))
+        vim.keymap.set("n", "s",    api.node.open.vertical,       opts("Open: Vertical Split"))
+        vim.keymap.set("n", "u",    api.tree.change_root_to_parent, opts("Up"))
+        vim.keymap.set("n", "o",    api.tree.change_root_to_node,   opts("CD"))
+        vim.keymap.set("n", "a",    api.fs.create,                opts("Create"))
+        vim.keymap.set("n", "d",    api.fs.remove,                opts("Delete"))
+        vim.keymap.set("n", "r",    api.fs.rename,                opts("Rename"))
+        vim.keymap.set("n", "x",    api.fs.cut,                   opts("Cut"))
+        vim.keymap.set("n", "c",    api.fs.copy.node,             opts("Copy"))
+        vim.keymap.set("n", "p",    api.fs.paste,                 opts("Paste"))
       end
 
       -- ==========================================
-      -- 2. 本体設定 (レスポンシブ・フロート)
+      -- 4. 本体設定
       -- ==========================================
       require("nvim-tree").setup({
         on_attach = my_on_attach,
@@ -279,13 +331,10 @@ require("lazy").setup({
             open_win_config = function()
               local screen_w = vim.opt.columns:get()
               local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
-
               local window_w = math.floor(screen_w * 0.4)
               local window_h = math.floor(screen_h * 0.8)
-
               local center_x = (screen_w - window_w) / 2
               local center_y = ((vim.opt.lines:get() - window_h) / 2) - vim.opt.cmdheight:get()
-
               return {
                 relative = "editor",
                 border = "rounded",
@@ -304,20 +353,20 @@ require("lazy").setup({
           icons = {
             glyphs = {
               git = {
-                unstaged  = "", -- 小さなドット（変更あり）
-                staged    = "", -- チェックボックス
-                unmerged  = "", 
-                renamed   = "󰑖", -- 回転矢印（リネーム）
-                untracked = "", -- 疑問符（未追跡）
-                deleted   = "", -- マイナス
-                ignored   = "", -- 進入禁止
+                unstaged  = "",
+                staged    = "",
+                unmerged  = "",
+                renamed   = "󰑖",
+                untracked = "",
+                deleted   = "",
+                ignored   = "",
               },
             },
           },
         },
         filters = {
           dotfiles = true,
-          custom = { "node_modules", ".git", ".nuxt", ".output", "__pycache__", ".venv", ".gemini" },
+          custom = custom_ignore_list,
         },
         actions = {
           open_file = {
@@ -350,6 +399,7 @@ require("lazy").setup({
     -- ステータスライン
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
+    event = "VeryLazy",
     opts = {
       options = {
         icons_enabled = true,
@@ -534,5 +584,29 @@ require("lazy").setup({
         end,
       })
     end,
+  },
+
+  -- ====================
+  -- Lazy.nvim 自体のチューニング
+  -- ====================
+  defaults = {
+    lazy = true,
+  },
+  performance = {
+    cache = {
+      enabled = true,
+    },
+    rtp = {
+      disabled_plugins = {
+        "gzip",
+        "matchit",
+        "matchparen",
+        "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+      },
+    },
   },
 })
