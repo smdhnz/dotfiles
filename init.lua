@@ -234,145 +234,46 @@ require("lazy").setup({
   },
 
   {
-    "nvim-tree/nvim-tree.lua",
-    version = "*",
-    lazy = false,
+    -- oil.nvim (テキスト編集感覚でファイル操作)
+    "stevearc/oil.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     keys = {
-      { "e", "<CMD>NvimTreeToggle<CR>", silent = true, noremap = true },
+      -- 現在の e キーでフローティング表示
+      { "e", function() require("oil").toggle_float() end, desc = "Open oil.nvim in float" },
     },
     config = function()
-      -- ==========================================
-      -- 1. 無視ファイルリスト
-      -- ==========================================
-      local custom_ignore_list = {
-        "node_modules",
-        ".git",
-        ".nuxt",
-        ".output",
-        "__pycache__",
-        ".venv",
-        ".gemini"
-      }
-
-      -- ==========================================
-      -- 2. ハイライト自動適用 (BufWinEnterを追加)
-      -- ==========================================
-      vim.api.nvim_create_autocmd({ "BufWinEnter", "FileType" }, {
-        pattern = "*",
-        callback = function()
-          if vim.bo.filetype ~= "NvimTree" then
-            return
-          end
-
-          -- 描画タイミングのズレを防ぐために schedule でラップ
-          vim.schedule(function()
-            -- 念のため既存の match をクリア（重複防止）
-            vim.fn.clearmatches()
-
-            -- A. ドットファイル (.config など) をグレーアウト
-            vim.fn.matchadd("Comment", [[ \zs\.[^ ]\+]])
-
-            -- B. custom_ignore_list を正規表現に変換してグレーアウト
-            local escaped_list = {}
-            for _, name in ipairs(custom_ignore_list) do
-              table.insert(escaped_list, vim.fn.escape(name, "."))
-            end
-            local pattern = table.concat(escaped_list, "\\|")
-
-            if pattern ~= "" then
-              -- 正規表現: スペースの後にリスト内の単語があり、その直後が行末かスペース
-              vim.fn.matchadd("Comment", [[ \zs\(]] .. pattern .. [[\)\ze\($\| \)]])
-            end
-          end)
-        end,
-      })
-
-      -- ==========================================
-      -- 3. カスタムキーマップ
-      -- ==========================================
-      local function my_on_attach(bufnr)
-        local api = require("nvim-tree.api")
-        local function opts(desc)
-          return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-        end
-
-        local function toggle_all_filters()
-          api.tree.toggle_hidden_filter()
-          api.tree.toggle_custom_filter()
-          api.tree.toggle_gitignore_filter()
-        end
-
-        vim.keymap.set("n", "<CR>", api.node.open.edit,           opts("Open"))
-        vim.keymap.set("n", "e",    api.tree.close,               opts("Close"))
-        vim.keymap.set("n", ".",    toggle_all_filters,           opts("Toggle All Filters"))
-        vim.keymap.set("n", "q",    api.tree.close,               opts("Close"))
-        vim.keymap.set("n", "s",    api.node.open.vertical,       opts("Open: Vertical Split"))
-        vim.keymap.set("n", "u",    api.tree.change_root_to_parent, opts("Up"))
-        vim.keymap.set("n", "o",    api.tree.change_root_to_node,   opts("CD"))
-        vim.keymap.set("n", "a",    api.fs.create,                opts("Create"))
-        vim.keymap.set("n", "d",    api.fs.remove,                opts("Delete"))
-        vim.keymap.set("n", "r",    api.fs.rename,                opts("Rename"))
-        vim.keymap.set("n", "x",    api.fs.cut,                   opts("Cut"))
-        vim.keymap.set("n", "c",    api.fs.copy.node,             opts("Copy"))
-        vim.keymap.set("n", "p",    api.fs.paste,                 opts("Paste"))
-      end
-
-      -- ==========================================
-      -- 4. 本体設定
-      -- ==========================================
-      require("nvim-tree").setup({
-        on_attach = my_on_attach,
-        update_focused_file = { enable = true },
-        view = {
-          float = {
-            enable = true,
-            quit_on_focus_loss = true,
-            open_win_config = function()
-              local screen_w = vim.opt.columns:get()
-              local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
-              local window_w = math.floor(screen_w * 0.4)
-              local window_h = math.floor(screen_h * 0.8)
-              local center_x = (screen_w - window_w) / 2
-              local center_y = ((vim.opt.lines:get() - window_h) / 2) - vim.opt.cmdheight:get()
-              return {
-                relative = "editor",
-                border = "rounded",
-                width = window_w,
-                height = window_h,
-                row = center_y,
-                col = center_x,
-              }
-            end,
+      require("oil").setup({
+        -- デフォルトのエクスプローラーにする（netrwを完全に置き換え）
+        default_file_explorer = true,
+        -- カラム設定（アイコン、パーミッション、サイズなど）
+        columns = {
+          "icon",
+          -- "permissions",
+          -- "size",
+        },
+        -- フローティングウィンドウの設定
+        float = {
+          padding = 2,
+          max_width = math.floor(vim.o.columns * 0.5), -- 画面幅の50%
+          max_height = math.floor(vim.o.lines * 0.7),  -- 画面高さの70%
+          border = "rounded",
+          win_options = {
+            winblend = 0,
           },
         },
-        renderer = {
-          special_files = {},
-          highlight_git = true,
-          indent_markers = { enable = true },
-          icons = {
-            glyphs = {
-              git = {
-                unstaged  = "",
-                staged    = "",
-                unmerged  = "",
-                renamed   = "󰑖",
-                untracked = "",
-                deleted   = "",
-                ignored   = "",
-              },
-            },
-          },
+        -- 表示設定
+        view_options = {
+          -- ドットファイルを表示するかどうか
+          show_hidden = false,
         },
-        filters = {
-          dotfiles = true,
-          custom = custom_ignore_list,
-        },
-        actions = {
-          open_file = {
-            quit_on_open = true,
-            window_picker = { enable = false },
-          },
+        use_default_keymaps = false,
+        keymaps = {
+          ["<CR>"] = "actions.select",
+          ["s"] = { "actions.select", opts = { vertical = true } },
+          ["q"] = { "actions.close", mode = "n" },
+          ["u"] = { "actions.parent", mode = "n" },
+          ["o"] = { "actions.select", mode = "n" },
+          ["."] = { "actions.toggle_hidden", mode = "n" },
         },
       })
     end,

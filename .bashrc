@@ -249,12 +249,20 @@ discord() {
 }
 
 
-# 安全な削除関数: del
 function del() {
-  local trash_dir="$HOME/.deleted/$(date +%Y-%m-%d)"
+  local trash_root="$HOME/.deleted"
+  local trash_dir="$trash_root/$(date +%Y-%m-%d)"
 
   # ゴミ箱ディレクトリの作成
   mkdir -p "$trash_dir"
+
+  # -maxdepth 1: ルート直下のみを対象にする
+  # -type d: ディレクトリのみを対象にする
+  # -mtime +7: 更新日が7日より前
+  if [ -d "$trash_root" ]; then
+    find "$trash_root" -maxdepth 1 -type d -mtime +7 -exec rm -rf {} +
+  fi
+  # --------------------------------------------------
 
   # 引数がない場合はヘルプを表示
   if [ $# -eq 0 ]; then
