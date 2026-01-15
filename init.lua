@@ -271,8 +271,7 @@ require("lazy").setup({
           ["<CR>"] = "actions.select",
           ["s"] = { "actions.select", opts = { vertical = true } },
           ["q"] = { "actions.close", mode = "n" },
-          ["u"] = { "actions.parent", mode = "n" },
-          ["o"] = { "actions.select", mode = "n" },
+          ["-"] = { "actions.parent", mode = "n" },
           ["."] = { "actions.toggle_hidden", mode = "n" },
         },
       })
