@@ -234,45 +234,70 @@ require("lazy").setup({
   },
 
   {
-    -- oil.nvim (テキスト編集感覚でファイル操作)
-    "stevearc/oil.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons",
+      "MunifTanjim/nui.nvim",
+    },
     keys = {
-      -- 現在の e キーでフローティング表示
-      { "e", function() require("oil").toggle_float() end, desc = "Open oil.nvim in float" },
+      -- e キーで起動
+      { "e", "<CMD>Neotree toggle<CR>", desc = "Toggle Neo-tree" },
     },
     config = function()
-      require("oil").setup({
-        -- デフォルトのエクスプローラーにする（netrwを完全に置き換え）
-        default_file_explorer = true,
-        -- カラム設定（アイコン、パーミッション、サイズなど）
-        columns = {
-          "icon",
-          -- "permissions",
-          -- "size",
-        },
-        -- フローティングウィンドウの設定
-        float = {
-          padding = 2,
-          max_width = math.floor(vim.o.columns * 0.5), -- 画面幅の50%
-          max_height = math.floor(vim.o.lines * 0.7),  -- 画面高さの70%
-          border = "rounded",
-          win_options = {
-            winblend = 0,
+      require("neo-tree").setup({
+        close_if_last_window = true,
+        -- デフォルトのマッピングをなるべく排除するための設定
+        use_default_mappings = false, 
+
+        window = {
+          position = "float",
+          popup = {
+            size = { height = "80%", width = "50%" },
+            position = "50%", -- 画面中央
+            border = "rounded",
+          },
+          mappings = {
+            ["u"] = "navigate_up", -- 親ディレクトリに移動 (Go up)
+            ["o"] = "set_root", -- ディレクトリの中へ移動 (Set root / Go into)
+            ["<CR>"] = "open", -- ファイルなら開く、フォルダなら開閉 (Toggle/Open)
+            ["s"] = "open_vsplit", -- 縦スプリットで開く
+            ["d"] = "delete", -- 削除
+            ["n"] = "add", -- 新規作成 (ファイル・フォルダ)
+            ["y"] = "copy_to_clipboard", -- コピー
+            ["p"] = "paste_from_clipboard", -- ペースト
+            ["q"] = "close_window", -- 閉じる
+            ["?"] = "show_help", -- ヘルプ表示 (マッピングを忘れたとき用)
+            ["."] = "toggle_hidden", --  隠しファイル・Ignoreファイルの表示切り替え
+
+            -- 無効化
+            ["<space>"] = "none",
+            ["/"] = "none",
+            ["z"] = "none",
           },
         },
-        -- 表示設定
-        view_options = {
-          -- ドットファイルを表示するかどうか
-          show_hidden = false,
-        },
-        use_default_keymaps = false,
-        keymaps = {
-          ["<CR>"] = "actions.select",
-          ["s"] = { "actions.select", opts = { vertical = true } },
-          ["q"] = { "actions.close", mode = "n" },
-          ["-"] = { "actions.parent", mode = "n" },
-          ["."] = { "actions.toggle_hidden", mode = "n" },
+        filesystem = {
+          follow_current_file = { enabled = false },
+          bind_to_cwd = false,
+          use_libuv_file_watcher = true,
+          -- 隠しファイルとフィルタリングの設定
+          filtered_items = {
+            -- visible = false: フィルタリングを有効にする（デフォルトで隠す）
+            visible = false,
+            -- ドットファイル（.configなど）を隠す
+            hide_dotfiles = true,
+            -- .gitignore に書かれているファイルを隠す
+            hide_gitignored = true,
+            -- 名前指定で隠す（ここに node_modules などを追加）
+            hide_by_name = {
+              "node_modules",
+            },
+            -- ワイルドカードで隠したい場合（例: *.meta ファイルなど）
+            -- hide_by_pattern = { 
+            --   "*.meta", 
+            -- },
+          },
         },
       })
     end,
