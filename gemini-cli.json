@@ -1,7 +1,8 @@
 {
   "general": {
     "preferredEditor": "nvim",
-    "disableAutoUpdate": true
+    "disableAutoUpdate": true,
+    "previewFeatures": true
   },
   "ui": {
     "theme": "Atom One",
