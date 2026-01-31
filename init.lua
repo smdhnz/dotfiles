@@ -192,6 +192,26 @@ require("lazy").setup({
   },
 
   {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    keys = {
+      { "<C-\\>", "<cmd>ToggleTerm<cr>", mode = { "n", "t" }, desc = "Toggle Terminal" },
+    },
+    opts = {
+      -- 見た目の設定
+      direction = "float",
+      float_opts = {
+        border = "curved",
+        winblend = 3,
+      },
+      size = 20,
+      start_in_insert = true,
+      hide_numbers = true,
+      shade_terminals = true,
+    },
+  },
+
+  {
     -- LazyGit
     "kdheepak/lazygit.nvim",
     lazy = true,
