@@ -2,18 +2,38 @@
 set -euo pipefail
 
 repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
-mkdir -p "$HOME/.config/nvim" "$HOME/.pi/agent"
-ln -sfn "$repo_dir/.config/nvim/init.lua" "$HOME/.config/nvim/init.lua"
-ln -sfn "$repo_dir/.pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
-ln -sfn "$repo_dir/.pi/agent/mcp.json" "$HOME/.pi/agent/mcp.json"
+
+link_file() {
+	local source=$1
+	local target=$2
+	mkdir -p "$(dirname -- "$target")"
+	ln -sfn "$source" "$target"
+	printf 'link: %s -> %s\n' "$target" "$source"
+}
+
+link_file "$repo_dir/.config/nvim/init.lua" "$HOME/.config/nvim/init.lua"
+link_file "$repo_dir/.pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
+link_file "$repo_dir/.pi/agent/mcp.json" "$HOME/.pi/agent/mcp.json"
 
 marker_start='# >>> dotfiles >>>'
 marker_end='# <<< dotfiles <<<'
-if ! grep -Fq "$marker_start" "$HOME/.bashrc"; then
-	cat >>"$HOME/.bashrc" <<EOF
+tmp_file=$(mktemp)
+trap 'rm -f "$tmp_file"' EXIT
+
+awk -v start="$marker_start" -v end="$marker_end" '
+	$0 == start { managed = 1; next }
+	$0 == end { managed = 0; next }
+	managed { next }
+	$0 == "" { blanks = blanks "\n"; next }
+	{ printf "%s", blanks; blanks = ""; print }
+' "$HOME/.bashrc" >"$tmp_file"
+
+cat >>"$tmp_file" <<EOF
 
 $marker_start
 source "$repo_dir/shell_setup.sh"
 $marker_end
 EOF
-fi
+mv "$tmp_file" "$HOME/.bashrc"
+trap - EXIT
+printf 'update: %s (source %s)\n' "$HOME/.bashrc" "$repo_dir/shell_setup.sh"
