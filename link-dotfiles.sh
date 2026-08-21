@@ -25,6 +25,20 @@ link_file "$repo_dir/.pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
 link_file "$repo_dir/.pi/agent/mcp.json" "$HOME/.pi/agent/mcp.json"
 link_file "$repo_dir/.pi/agent/extensions" "$HOME/.pi/agent/extensions"
 
+settings_dir="$HOME/.pi/agent"
+settings_file="$settings_dir/settings.json"
+settings_tmp=$(mktemp "$settings_dir/settings.json.XXXXXX")
+trap 'rm -f "$settings_tmp"' EXIT
+if [ -f "$settings_file" ]; then
+	jq -s '.[0] * .[1]' "$settings_file" "$repo_dir/.pi/agent/settings.json" >"$settings_tmp"
+else
+	jq '.' "$repo_dir/.pi/agent/settings.json" >"$settings_tmp"
+fi
+chmod 600 "$settings_tmp"
+mv "$settings_tmp" "$settings_file"
+trap - EXIT
+printf 'update: %s (merge %s)\n' "$settings_file" "$repo_dir/.pi/agent/settings.json"
+
 marker_start='# >>> dotfiles >>>'
 marker_end='# <<< dotfiles <<<'
 tmp_file=$(mktemp)

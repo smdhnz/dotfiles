@@ -20,12 +20,13 @@ cd ~/dotfiles
 ./install.sh
 ```
 
-`.pi/agent/settings.json`は既存設定とのマージが必要なため自動配置しない。
+`link-dotfiles.sh`はいつでも再実行できる。リポジトリの移動・ディレクトリ名変更後や、リンクの修復、設定の再反映に使用する。
 
 ```bash
-jq -s '.[0] * .[1]' ~/.pi/agent/settings.json ~/dotfiles/.pi/agent/settings.json \
-  > /tmp/pi-settings.json && mv /tmp/pi-settings.json ~/.pi/agent/settings.json
+./link-dotfiles.sh
 ```
+
+Piの`settings.json`は既存設定へマージし、同じ項目はリポジトリ側の値で更新する。
 
 ## 更新
 
