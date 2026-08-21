@@ -6,12 +6,14 @@ repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 link_file() {
 	local source=$1
 	local target=$2
-	local backup
 	mkdir -p "$(dirname -- "$target")"
+	if [ -d "$target" ] && [ ! -L "$target" ]; then
+		printf 'error: ディレクトリは置換できません: %s\n' "$target" >&2
+		return 1
+	fi
 	if [ -e "$target" ] && [ ! -L "$target" ]; then
-		backup="${target}.bak.$(date +%Y%m%d%H%M%S)"
-		mv "$target" "$backup"
-		printf 'backup: %s -> %s\n' "$target" "$backup"
+		rm -f "$target"
+		printf 'replace: %s\n' "$target"
 	fi
 	ln -sfn "$source" "$target"
 	printf 'link: %s -> %s\n' "$target" "$source"
