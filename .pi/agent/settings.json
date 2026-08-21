@@ -11,5 +11,5 @@
     "npm:@dietrichgebert/ponytail"
   ],
   "theme": "dark",
-  "shellCommandPrefix": "if [ -f ~/.devbox/bash_functions.sh ]; then source ~/.devbox/bash_functions.sh; fi"
+  "shellCommandPrefix": "if [ -f ~/.config/shell/bash_functions.sh ]; then source ~/.config/shell/bash_functions.sh; fi"
 }
