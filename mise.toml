@@ -1,0 +1,16 @@
+[tools]
+node = "22"
+yarn = "1.22.22"
+bun = "latest"
+uv = "latest"
+neovim = "latest"
+lazygit = "latest"
+lazydocker = "latest"
+gh = "latest"
+tree-sitter = "latest"
+aws-cli = "latest"
+aws-sam-cli = "latest"
+gcloud = "latest"
+
+[settings]
+lockfile = true

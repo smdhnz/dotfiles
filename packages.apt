@@ -1,0 +1,29 @@
+# OS integration and basic utilities
+build-essential
+pkg-config
+git
+curl
+ca-certificates
+gnupg
+jq
+ripgrep
+fd-find
+fzf
+shfmt
+zip
+unzip
+
+# Native libraries
+zlib1g-dev
+libssl-dev
+libbz2-dev
+libsqlite3-dev
+libjpeg-dev
+libcairo2-dev
+libpango1.0-dev
+libpng-dev
+libgif-dev
+
+# System-facing executables
+ffmpeg
+bubblewrap

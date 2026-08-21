@@ -1,0 +1,15 @@
+{
+  "defaultThinkingLevel": "medium",
+  "hideThinkingBlock": true,
+  "collapseChangelog": true,
+  "treeFilterMode": "user-only",
+  "packages": [
+    "npm:pi-web-access",
+    "npm:pi-subagents",
+    "npm:pi-mcp-adapter",
+    "npm:@hypabolic/pi-hypa",
+    "npm:@dietrichgebert/ponytail"
+  ],
+  "theme": "dark",
+  "shellCommandPrefix": "if [ -f ~/.devbox/bash_functions.sh ]; then source ~/.devbox/bash_functions.sh; fi"
+}
