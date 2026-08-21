@@ -6,11 +6,18 @@ repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 link_file() {
 	local source=$1
 	local target=$2
+	local backup
 	mkdir -p "$(dirname -- "$target")"
+	if [ -e "$target" ] && [ ! -L "$target" ]; then
+		backup="${target}.bak.$(date +%Y%m%d%H%M%S)"
+		mv "$target" "$backup"
+		printf 'backup: %s -> %s\n' "$target" "$backup"
+	fi
 	ln -sfn "$source" "$target"
 	printf 'link: %s -> %s\n' "$target" "$source"
 }
 
+link_file "$repo_dir/mise.toml" "$HOME/.config/mise/config.toml"
 link_file "$repo_dir/.config/nvim/init.lua" "$HOME/.config/nvim/init.lua"
 link_file "$repo_dir/.pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
 link_file "$repo_dir/.pi/agent/mcp.json" "$HOME/.pi/agent/mcp.json"
