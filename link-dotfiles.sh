@@ -20,7 +20,6 @@ link_file() {
 }
 
 link_file "$repo_dir/mise.toml" "$HOME/.config/mise/config.toml"
-link_file "$repo_dir/bash_functions.sh" "$HOME/.config/shell/bash_functions.sh"
 link_file "$repo_dir/.config/nvim/init.lua" "$HOME/.config/nvim/init.lua"
 link_file "$repo_dir/.pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
 link_file "$repo_dir/.pi/agent/mcp.json" "$HOME/.pi/agent/mcp.json"

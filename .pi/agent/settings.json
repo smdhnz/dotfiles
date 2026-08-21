@@ -10,6 +10,5 @@
     "npm:@hypabolic/pi-hypa",
     "npm:@dietrichgebert/ponytail"
   ],
-  "theme": "dark",
-  "shellCommandPrefix": "if [ -f ~/.config/shell/bash_functions.sh ]; then source ~/.config/shell/bash_functions.sh; fi"
+  "theme": "dark"
 }
