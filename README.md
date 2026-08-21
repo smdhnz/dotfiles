@@ -15,7 +15,7 @@ Ubuntu/WSL向けの開発環境。OS依存はapt、言語ランタイムと更�
 ## 新規セットアップ
 
 ```bash
-git clone <repository-url> ~/dotfiles
+git clone https://github.com/smdhnz/dotfiles ~/dotfiles
 cd ~/dotfiles
 ./install.sh
 ```
