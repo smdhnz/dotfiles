@@ -27,22 +27,7 @@ mise trust "$repo_dir/mise.toml"
 mise --cd "$repo_dir" install
 mise reshim
 
-mkdir -p "$HOME/.config/nvim" "$HOME/.pi/agent"
-ln -sfn "$repo_dir/.config/nvim/init.lua" "$HOME/.config/nvim/init.lua"
-ln -sfn "$repo_dir/.pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
-ln -sfn "$repo_dir/.pi/agent/mcp.json" "$HOME/.pi/agent/mcp.json"
-
-marker_start='# >>> dotfiles >>>'
-marker_end='# <<< dotfiles <<<'
-if ! grep -Fq "$marker_start" "$HOME/.bashrc"; then
-	cat >>"$HOME/.bashrc" <<EOF
-
-$marker_start
-source "$repo_dir/shell_setup.sh"
-$marker_end
-EOF
-fi
-
+"$repo_dir/link-dotfiles.sh"
 "$repo_dir/install-bun-tools.sh"
 
 echo "インストール完了。新しいbashで動作確認してください。"
