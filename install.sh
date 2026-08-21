@@ -17,10 +17,11 @@ mapfile -t apt_packages < <(grep -Ev '^\s*(#|$)' "$repo_dir/packages.apt")
 sudo apt-get update
 sudo apt-get install -y "${apt_packages[@]}"
 
-if ! command -v mise >/dev/null 2>&1 || [[ "$(command -v mise)" == /nix/store/* ]]; then
+if [ ! -x "$HOME/.local/bin/mise" ]; then
 	curl https://mise.run | sh
 fi
 export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+hash -r
 
 mise trust "$repo_dir/mise.toml"
 mise --cd "$repo_dir" install
