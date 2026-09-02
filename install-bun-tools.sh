@@ -15,12 +15,16 @@ packages=(
 	@vue/language-server
 	@fsouza/prettierd
 	@tailwindcss/language-server
-	@earendil-works/pi-coding-agent
+	@oh-my-pi/pi-coding-agent
 	@prisma/language-server
 	wsl-open
 )
 
 bun install --global "${packages[@]}"
+
+if ! omp plugin list --json | jq -e '.npm[]? | select(.name == "omp-ponytail")' >/dev/null; then
+	omp plugin install github:gyoz-ai/omp-ponytail
+fi
 mkdir -p "$HOME/.local/bin"
 if command -v wsl-open >/dev/null 2>&1; then
 	ln -sfn "$(command -v wsl-open)" "$HOME/.local/bin/xdg-open"

@@ -6,9 +6,9 @@ Ubuntu/WSL向けの開発環境。OS依存はapt、言語ランタイムと更�
 
 - `packages.apt`: ネイティブライブラリ、ビルド基盤、OS統合ツール
 - `mise.toml`: Node、Bun、uv、Neovim、Git/AWS/GCP系CLI
-- `install-bun-tools.sh`: Pi、language server等のNode製グローバルCLI
+- `install-bun-tools.sh`: OMP、language server等のNode製グローバルCLI
 - `shell_setup.sh`: 軽量な環境変数、mise activation、alias、function
-- `.config/`, `.pi/`: dotfiles本体
+- `.config/`, `.omp/`: dotfiles本体
 
 シェル起動時にインストールや更新は行わない。非対話プロセス向けにmise shimsを常時`PATH`へ追加する。
 
@@ -26,7 +26,7 @@ cd ~/dotfiles
 ./link-dotfiles.sh
 ```
 
-Piの`settings.json`は既存設定へマージし、同じ項目はリポジトリ側の値で更新する。
+OMPのグローバル指示と`config.yml`は`~/.omp/agent/`へリンクする。認証情報、セッション、キャッシュはOMP自身の管理対象として置換しない。画像生成はOMP内蔵ツールを有効化し、Codex認証を優先して使用する。
 
 ## 更新
 

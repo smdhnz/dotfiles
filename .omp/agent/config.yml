@@ -1,0 +1,35 @@
+providers:
+  webSearchOrder:
+    []
+  imageOrder:
+    - openai-codex
+modelRoles:
+  default: openai-codex/gpt-5.6-sol
+symbolPreset: nerd
+composer:
+  shape: band
+theme:
+  dark: dark-monochrome
+  light: light
+setupVersion: 2
+display:
+  showTokenUsage: false
+  hideToolActivity: false
+colorBlindMode: false
+defaultThinkingLevel: medium
+hideThinkingBlock: true
+statusLine:
+  showHookStatus: true
+  preset: minimal
+  separator: ascii
+  sessionAccent: true
+  transparent: true
+  compactThinkingLevel: true
+generate_image:
+  enabled: true
+browser:
+  enabled: false
+tui:
+  tight: true
+dev:
+  autoqaConsent: denied

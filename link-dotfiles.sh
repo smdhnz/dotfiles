@@ -6,11 +6,9 @@ repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 main() {
 	link_file "$repo_dir/mise.toml" "$HOME/.config/mise/config.toml"
 	link_file "$repo_dir/.config/nvim/init.lua" "$HOME/.config/nvim/init.lua"
-	link_file "$repo_dir/.pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
-	link_file "$repo_dir/.pi/agent/mcp.json" "$HOME/.pi/agent/mcp.json"
-	link_file "$repo_dir/.pi/agent/extensions" "$HOME/.pi/agent/extensions"
+	link_file "$repo_dir/.omp/agent/AGENTS.md" "$HOME/.omp/agent/AGENTS.md"
+	link_file "$repo_dir/.omp/agent/config.yml" "$HOME/.omp/agent/config.yml"
 
-	update_pi_settings
 	update_bashrc
 }
 
@@ -28,24 +26,6 @@ link_file() {
 	fi
 	ln -sfn "$source" "$target"
 	printf 'link: %s -> %s\n' "$target" "$source"
-}
-
-update_pi_settings() {
-	local settings_dir="$HOME/.pi/agent"
-	local settings_file="$settings_dir/settings.json"
-	local settings_tmp
-	mkdir -p "$settings_dir"
-	settings_tmp=$(mktemp "$settings_dir/settings.json.XXXXXX")
-	trap 'rm -f "$settings_tmp"' EXIT
-	if [ -f "$settings_file" ]; then
-		jq -s '.[0] * .[1]' "$settings_file" "$repo_dir/.pi/agent/settings.json" >"$settings_tmp"
-	else
-		jq '.' "$repo_dir/.pi/agent/settings.json" >"$settings_tmp"
-	fi
-	chmod 600 "$settings_tmp"
-	mv "$settings_tmp" "$settings_file"
-	trap - EXIT
-	printf 'update: %s (merge %s)\n' "$settings_file" "$repo_dir/.pi/agent/settings.json"
 }
 
 update_bashrc() {

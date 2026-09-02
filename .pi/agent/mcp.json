@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "browsermcp": {
-      "command": "bunx",
-      "args": ["@browsermcp/mcp@latest"]
-    }
-  }
-}
