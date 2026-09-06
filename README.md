@@ -6,7 +6,7 @@ Ubuntu/WSL向けの開発環境。OS依存はapt、言語ランタイムと更�
 
 - `packages.apt`: ネイティブライブラリ、ビルド基盤、OS統合ツール
 - `mise.toml`: Node、Bun、uv、Neovim、Git/AWS/GCP系CLI
-- `install-bun-tools.sh`: OMP、language server等のNode製グローバルCLI
+- `install-bun-tools.sh`: OMP、Pi、language server等のNode製グローバルCLI
 - `shell_setup.sh`: 軽量な環境変数、mise activation、alias、function
 - `.config/`, `.omp/`: dotfiles本体
 

@@ -4,7 +4,7 @@ providers:
   imageOrder:
     - openai-codex
 modelRoles:
-  default: openai-codex/gpt-5.6-sol
+  default: openai-codex/gpt-5.6-sol:medium
 symbolPreset: nerd
 composer:
   shape: band

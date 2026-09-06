@@ -16,6 +16,7 @@ packages=(
 	@fsouza/prettierd
 	@tailwindcss/language-server
 	@oh-my-pi/pi-coding-agent
+	@earendil-works/pi-coding-agent
 	@prisma/language-server
 	wsl-open
 )
