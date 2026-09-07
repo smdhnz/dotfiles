@@ -6,8 +6,8 @@ repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 main() {
 	link_file "$repo_dir/mise.toml" "$HOME/.config/mise/config.toml"
 	link_file "$repo_dir/.config/nvim/init.lua" "$HOME/.config/nvim/init.lua"
-	link_file "$repo_dir/.omp/agent/AGENTS.md" "$HOME/.omp/agent/AGENTS.md"
-	link_file "$repo_dir/.omp/agent/config.yml" "$HOME/.omp/agent/config.yml"
+	link_file "$repo_dir/.pi/agent/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
+	link_file "$repo_dir/.pi/agent/settings.json" "$HOME/.pi/agent/settings.json"
 
 	update_bashrc
 }

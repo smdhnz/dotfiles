@@ -1,0 +1,14 @@
+{
+  "theme": "dark",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-6-astra",
+  "outputPad": 0,
+  "editorPaddingX": 0,
+  "packages": [
+    "npm:@dietrichgebert/ponytail",
+    "npm:pi-mcp-adapter",
+    "npm:pi-web-access",
+    "npm:pi-subagents"
+  ],
+  "lastChangelogVersion": "0.85.1"
+}

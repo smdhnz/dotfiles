@@ -1,1 +1,8 @@
 .env
+
+# Pi: 設定・指示のみ管理し、認証情報や実行時データは除外
+.pi/*
+!.pi/agent/
+.pi/agent/*
+!.pi/agent/settings.json
+!.pi/agent/AGENTS.md

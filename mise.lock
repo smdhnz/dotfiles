@@ -14,13 +14,22 @@ url = "https://awscli.amazonaws.com/awscli-exe-linux-aarch64-2.36.28.zip"
 checksum = "blake3:1c3af5e87549108292513a488c8b89ca26653ba7579721c5dae08cc54ceaa633"
 url = "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.36.28.zip"
 
+[tools.aws-cli."platforms.linux-x64-baseline"]
+url = "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.36.28.zip"
+
 [tools.aws-cli."platforms.linux-x64-musl"]
+url = "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.36.28.zip"
+
+[tools.aws-cli."platforms.linux-x64-musl-baseline"]
 url = "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.36.28.zip"
 
 [tools.aws-cli."platforms.macos-arm64"]
 url = "https://awscli.amazonaws.com/AWSCLIV2-2.36.28.pkg"
 
 [tools.aws-cli."platforms.macos-x64"]
+url = "https://awscli.amazonaws.com/AWSCLIV2-2.36.28.pkg"
+
+[tools.aws-cli."platforms.macos-x64-baseline"]
 url = "https://awscli.amazonaws.com/AWSCLIV2-2.36.28.pkg"
 
 [[tools.aws-sam-cli]]
@@ -42,7 +51,17 @@ checksum = "sha256:e95678af994e5c1f12b59314de7bdee644be7246df1e85c4a4f2b48448d85
 url = "https://github.com/aws/aws-sam-cli/releases/download/v1.165.0/aws-sam-cli-linux-x86_64.zip"
 url_api = "https://api.github.com/repos/aws/aws-sam-cli/releases/assets/497055647"
 
+[tools.aws-sam-cli."platforms.linux-x64-baseline"]
+checksum = "sha256:e95678af994e5c1f12b59314de7bdee644be7246df1e85c4a4f2b48448d8569f"
+url = "https://github.com/aws/aws-sam-cli/releases/download/v1.165.0/aws-sam-cli-linux-x86_64.zip"
+url_api = "https://api.github.com/repos/aws/aws-sam-cli/releases/assets/497055647"
+
 [tools.aws-sam-cli."platforms.linux-x64-musl"]
+checksum = "sha256:e95678af994e5c1f12b59314de7bdee644be7246df1e85c4a4f2b48448d8569f"
+url = "https://github.com/aws/aws-sam-cli/releases/download/v1.165.0/aws-sam-cli-linux-x86_64.zip"
+url_api = "https://api.github.com/repos/aws/aws-sam-cli/releases/assets/497055647"
+
+[tools.aws-sam-cli."platforms.linux-x64-musl-baseline"]
 checksum = "sha256:e95678af994e5c1f12b59314de7bdee644be7246df1e85c4a4f2b48448d8569f"
 url = "https://github.com/aws/aws-sam-cli/releases/download/v1.165.0/aws-sam-cli-linux-x86_64.zip"
 url_api = "https://api.github.com/repos/aws/aws-sam-cli/releases/assets/497055647"
@@ -53,6 +72,11 @@ url = "https://github.com/aws/aws-sam-cli/releases/download/v1.165.0/aws-sam-cli
 url_api = "https://api.github.com/repos/aws/aws-sam-cli/releases/assets/497055803"
 
 [tools.aws-sam-cli."platforms.macos-x64"]
+checksum = "sha256:d14a74b199329fd91bc32adaf4505afb51cdcf33df6652ad946015167a61d019"
+url = "https://github.com/aws/aws-sam-cli/releases/download/v1.165.0/aws-sam-cli-macos-x86_64.pkg"
+url_api = "https://api.github.com/repos/aws/aws-sam-cli/releases/assets/497055781"
+
+[tools.aws-sam-cli."platforms.macos-x64-baseline"]
 checksum = "sha256:d14a74b199329fd91bc32adaf4505afb51cdcf33df6652ad946015167a61d019"
 url = "https://github.com/aws/aws-sam-cli/releases/download/v1.165.0/aws-sam-cli-macos-x86_64.pkg"
 url_api = "https://api.github.com/repos/aws/aws-sam-cli/releases/assets/497055781"
@@ -118,7 +142,13 @@ url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-581.0.0
 [tools.gcloud."platforms.linux-x64"]
 url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-581.0.0-linux-x86_64.tar.gz"
 
+[tools.gcloud."platforms.linux-x64-baseline"]
+url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-581.0.0-linux-x86_64.tar.gz"
+
 [tools.gcloud."platforms.linux-x64-musl"]
+url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-581.0.0-linux-x86_64.tar.gz"
+
+[tools.gcloud."platforms.linux-x64-musl-baseline"]
 url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-581.0.0-linux-x86_64.tar.gz"
 
 [tools.gcloud."platforms.macos-arm64"]
@@ -127,7 +157,13 @@ url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-581.0.0
 [tools.gcloud."platforms.macos-x64"]
 url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-581.0.0-darwin-x86_64.tar.gz"
 
+[tools.gcloud."platforms.macos-x64-baseline"]
+url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-581.0.0-darwin-x86_64.tar.gz"
+
 [tools.gcloud."platforms.windows-x64"]
+url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-581.0.0-windows-x86_64-bundled-python.zip"
+
+[tools.gcloud."platforms.windows-x64-baseline"]
 url = "https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-581.0.0-windows-x86_64-bundled-python.zip"
 
 [[tools.gh]]
@@ -152,7 +188,19 @@ url = "https://github.com/cli/cli/releases/download/v2.97.0/gh_2.97.0_linux_amd6
 url_api = "https://api.github.com/repos/cli/cli/releases/assets/496108269"
 provenance = "github-attestations"
 
+[tools.gh."platforms.linux-x64-baseline"]
+checksum = "sha256:a2c9b8497e1f85b1ad0dfcb78b5a622e098801b8e461e459e88e1ee12f018112"
+url = "https://github.com/cli/cli/releases/download/v2.97.0/gh_2.97.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/496108269"
+provenance = "github-attestations"
+
 [tools.gh."platforms.linux-x64-musl"]
+checksum = "sha256:a2c9b8497e1f85b1ad0dfcb78b5a622e098801b8e461e459e88e1ee12f018112"
+url = "https://github.com/cli/cli/releases/download/v2.97.0/gh_2.97.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/496108269"
+provenance = "github-attestations"
+
+[tools.gh."platforms.linux-x64-musl-baseline"]
 checksum = "sha256:a2c9b8497e1f85b1ad0dfcb78b5a622e098801b8e461e459e88e1ee12f018112"
 url = "https://github.com/cli/cli/releases/download/v2.97.0/gh_2.97.0_linux_amd64.tar.gz"
 url_api = "https://api.github.com/repos/cli/cli/releases/assets/496108269"
@@ -170,7 +218,19 @@ url = "https://github.com/cli/cli/releases/download/v2.97.0/gh_2.97.0_macOS_amd6
 url_api = "https://api.github.com/repos/cli/cli/releases/assets/496108300"
 provenance = "github-attestations"
 
+[tools.gh."platforms.macos-x64-baseline"]
+checksum = "sha256:63298c998cc2a924c9e254c6af6a1caad6ece281122687a91f079bc0a462700e"
+url = "https://github.com/cli/cli/releases/download/v2.97.0/gh_2.97.0_macOS_amd64.zip"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/496108300"
+provenance = "github-attestations"
+
 [tools.gh."platforms.windows-x64"]
+checksum = "sha256:35d7fe05c4dd1411ffda1e73dfc7c6f44b75c936ca51fa6595c657fdc0350cec"
+url = "https://github.com/cli/cli/releases/download/v2.97.0/gh_2.97.0_windows_amd64.zip"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/496108319"
+provenance = "github-attestations"
+
+[tools.gh."platforms.windows-x64-baseline"]
 checksum = "sha256:35d7fe05c4dd1411ffda1e73dfc7c6f44b75c936ca51fa6595c657fdc0350cec"
 url = "https://github.com/cli/cli/releases/download/v2.97.0/gh_2.97.0_windows_amd64.zip"
 url_api = "https://api.github.com/repos/cli/cli/releases/assets/496108319"
@@ -195,7 +255,17 @@ checksum = "sha256:0d9dbfc26068b218e7ed84b104748cadc6e3cf733c0afd35465306fb39b95
 url = "https://github.com/jesseduffield/lazydocker/releases/download/v0.25.2/lazydocker_0.25.2_Linux_x86_64.tar.gz"
 url_api = "https://api.github.com/repos/jesseduffield/lazydocker/releases/assets/399711577"
 
+[tools.lazydocker."platforms.linux-x64-baseline"]
+checksum = "sha256:0d9dbfc26068b218e7ed84b104748cadc6e3cf733c0afd35465306fb39b9523c"
+url = "https://github.com/jesseduffield/lazydocker/releases/download/v0.25.2/lazydocker_0.25.2_Linux_x86_64.tar.gz"
+url_api = "https://api.github.com/repos/jesseduffield/lazydocker/releases/assets/399711577"
+
 [tools.lazydocker."platforms.linux-x64-musl"]
+checksum = "sha256:0d9dbfc26068b218e7ed84b104748cadc6e3cf733c0afd35465306fb39b9523c"
+url = "https://github.com/jesseduffield/lazydocker/releases/download/v0.25.2/lazydocker_0.25.2_Linux_x86_64.tar.gz"
+url_api = "https://api.github.com/repos/jesseduffield/lazydocker/releases/assets/399711577"
+
+[tools.lazydocker."platforms.linux-x64-musl-baseline"]
 checksum = "sha256:0d9dbfc26068b218e7ed84b104748cadc6e3cf733c0afd35465306fb39b9523c"
 url = "https://github.com/jesseduffield/lazydocker/releases/download/v0.25.2/lazydocker_0.25.2_Linux_x86_64.tar.gz"
 url_api = "https://api.github.com/repos/jesseduffield/lazydocker/releases/assets/399711577"
@@ -210,7 +280,17 @@ checksum = "sha256:af70b6e234089aa24924db25fc201d17f224e76d334e743e4595d30cf83a0
 url = "https://github.com/jesseduffield/lazydocker/releases/download/v0.25.2/lazydocker_0.25.2_Darwin_x86_64.tar.gz"
 url_api = "https://api.github.com/repos/jesseduffield/lazydocker/releases/assets/399711563"
 
+[tools.lazydocker."platforms.macos-x64-baseline"]
+checksum = "sha256:af70b6e234089aa24924db25fc201d17f224e76d334e743e4595d30cf83a013b"
+url = "https://github.com/jesseduffield/lazydocker/releases/download/v0.25.2/lazydocker_0.25.2_Darwin_x86_64.tar.gz"
+url_api = "https://api.github.com/repos/jesseduffield/lazydocker/releases/assets/399711563"
+
 [tools.lazydocker."platforms.windows-x64"]
+checksum = "sha256:facae8869c1bf144468191c563002162273a2c2761f052659170530cae3fa8a9"
+url = "https://github.com/jesseduffield/lazydocker/releases/download/v0.25.2/lazydocker_0.25.2_Windows_x86_64.zip"
+url_api = "https://api.github.com/repos/jesseduffield/lazydocker/releases/assets/399711571"
+
+[tools.lazydocker."platforms.windows-x64-baseline"]
 checksum = "sha256:facae8869c1bf144468191c563002162273a2c2761f052659170530cae3fa8a9"
 url = "https://github.com/jesseduffield/lazydocker/releases/download/v0.25.2/lazydocker_0.25.2_Windows_x86_64.zip"
 url_api = "https://api.github.com/repos/jesseduffield/lazydocker/releases/assets/399711571"
@@ -234,7 +314,17 @@ checksum = "sha256:f8ea237c41f194cd799b48505518bfdaae4edf5a2ad6bd3d898e939785ee4
 url = "https://github.com/jesseduffield/lazygit/releases/download/v0.64.1/lazygit_0.64.1_linux_x86_64.tar.gz"
 url_api = "https://api.github.com/repos/jesseduffield/lazygit/releases/assets/511894209"
 
+[tools.lazygit."platforms.linux-x64-baseline"]
+checksum = "sha256:f8ea237c41f194cd799b48505518bfdaae4edf5a2ad6bd3d898e939785ee4532"
+url = "https://github.com/jesseduffield/lazygit/releases/download/v0.64.1/lazygit_0.64.1_linux_x86_64.tar.gz"
+url_api = "https://api.github.com/repos/jesseduffield/lazygit/releases/assets/511894209"
+
 [tools.lazygit."platforms.linux-x64-musl"]
+checksum = "sha256:f8ea237c41f194cd799b48505518bfdaae4edf5a2ad6bd3d898e939785ee4532"
+url = "https://github.com/jesseduffield/lazygit/releases/download/v0.64.1/lazygit_0.64.1_linux_x86_64.tar.gz"
+url_api = "https://api.github.com/repos/jesseduffield/lazygit/releases/assets/511894209"
+
+[tools.lazygit."platforms.linux-x64-musl-baseline"]
 checksum = "sha256:f8ea237c41f194cd799b48505518bfdaae4edf5a2ad6bd3d898e939785ee4532"
 url = "https://github.com/jesseduffield/lazygit/releases/download/v0.64.1/lazygit_0.64.1_linux_x86_64.tar.gz"
 url_api = "https://api.github.com/repos/jesseduffield/lazygit/releases/assets/511894209"
@@ -249,7 +339,17 @@ checksum = "sha256:f727fdf2efa46f78d102639eafe085cef437928da1e9ec79ec8e203b8a12f
 url = "https://github.com/jesseduffield/lazygit/releases/download/v0.64.1/lazygit_0.64.1_darwin_x86_64.tar.gz"
 url_api = "https://api.github.com/repos/jesseduffield/lazygit/releases/assets/511894192"
 
+[tools.lazygit."platforms.macos-x64-baseline"]
+checksum = "sha256:f727fdf2efa46f78d102639eafe085cef437928da1e9ec79ec8e203b8a12f2a2"
+url = "https://github.com/jesseduffield/lazygit/releases/download/v0.64.1/lazygit_0.64.1_darwin_x86_64.tar.gz"
+url_api = "https://api.github.com/repos/jesseduffield/lazygit/releases/assets/511894192"
+
 [tools.lazygit."platforms.windows-x64"]
+checksum = "sha256:de8eca2cf2e75857882d313bf9dfc706a7aae893951ab29df706c99b525661ae"
+url = "https://github.com/jesseduffield/lazygit/releases/download/v0.64.1/lazygit_0.64.1_windows_x86_64.zip"
+url_api = "https://api.github.com/repos/jesseduffield/lazygit/releases/assets/511894165"
+
+[tools.lazygit."platforms.windows-x64-baseline"]
 checksum = "sha256:de8eca2cf2e75857882d313bf9dfc706a7aae893951ab29df706c99b525661ae"
 url = "https://github.com/jesseduffield/lazygit/releases/download/v0.64.1/lazygit_0.64.1_windows_x86_64.zip"
 url_api = "https://api.github.com/repos/jesseduffield/lazygit/releases/assets/511894165"
@@ -267,7 +367,13 @@ url = "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-linux-arm
 [tools.neovim."platforms.linux-x64"]
 url = "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-linux-x86_64.tar.gz"
 
+[tools.neovim."platforms.linux-x64-baseline"]
+url = "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-linux-x86_64.tar.gz"
+
 [tools.neovim."platforms.linux-x64-musl"]
+url = "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-linux-x86_64.tar.gz"
+
+[tools.neovim."platforms.linux-x64-musl-baseline"]
 url = "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-linux-x86_64.tar.gz"
 
 [tools.neovim."platforms.macos-arm64"]
@@ -276,7 +382,13 @@ url = "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-macos-arm
 [tools.neovim."platforms.macos-x64"]
 url = "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-macos-x86_64.tar.gz"
 
+[tools.neovim."platforms.macos-x64-baseline"]
+url = "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-macos-x86_64.tar.gz"
+
 [tools.neovim."platforms.windows-x64"]
+url = "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-win64.zip"
+
+[tools.neovim."platforms.windows-x64-baseline"]
 url = "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-win64.zip"
 
 [[tools.node]]
@@ -295,7 +407,15 @@ url = "https://unofficial-builds.nodejs.org/download/release/v22.23.1/node-v22.2
 checksum = "sha256:7a8cb04b4a1df4eaf432125324b81b29a088e73570a23259a8de1c65d07fc129"
 url = "https://nodejs.org/dist/v22.23.1/node-v22.23.1-linux-x64.tar.gz"
 
+[tools.node."platforms.linux-x64-baseline"]
+checksum = "sha256:7a8cb04b4a1df4eaf432125324b81b29a088e73570a23259a8de1c65d07fc129"
+url = "https://nodejs.org/dist/v22.23.1/node-v22.23.1-linux-x64.tar.gz"
+
 [tools.node."platforms.linux-x64-musl"]
+checksum = "sha256:b04877cf19a1b2515cfd95a0eab8f357b2eaa065128c3b9da07b0b10efe2577c"
+url = "https://unofficial-builds.nodejs.org/download/release/v22.23.1/node-v22.23.1-linux-x64-musl.tar.gz"
+
+[tools.node."platforms.linux-x64-musl-baseline"]
 checksum = "sha256:b04877cf19a1b2515cfd95a0eab8f357b2eaa065128c3b9da07b0b10efe2577c"
 url = "https://unofficial-builds.nodejs.org/download/release/v22.23.1/node-v22.23.1-linux-x64-musl.tar.gz"
 
@@ -307,7 +427,15 @@ url = "https://nodejs.org/dist/v22.23.1/node-v22.23.1-darwin-arm64.tar.gz"
 checksum = "sha256:b8da981b8a0b1241b70249204916da76c63573ddf5814dbd2d1e41069105cb81"
 url = "https://nodejs.org/dist/v22.23.1/node-v22.23.1-darwin-x64.tar.gz"
 
+[tools.node."platforms.macos-x64-baseline"]
+checksum = "sha256:b8da981b8a0b1241b70249204916da76c63573ddf5814dbd2d1e41069105cb81"
+url = "https://nodejs.org/dist/v22.23.1/node-v22.23.1-darwin-x64.tar.gz"
+
 [tools.node."platforms.windows-x64"]
+checksum = "sha256:7df0bc9375723f4a86b3aa1b7cc73342423d9677a8df4538aca31a049e309c29"
+url = "https://nodejs.org/dist/v22.23.1/node-v22.23.1-win-x64.zip"
+
+[tools.node."platforms.windows-x64-baseline"]
 checksum = "sha256:7df0bc9375723f4a86b3aa1b7cc73342423d9677a8df4538aca31a049e309c29"
 url = "https://nodejs.org/dist/v22.23.1/node-v22.23.1-win-x64.zip"
 
@@ -333,7 +461,19 @@ url = "https://github.com/tree-sitter/tree-sitter/releases/download/v0.26.12/tre
 url_api = "https://api.github.com/repos/tree-sitter/tree-sitter/releases/assets/506408040"
 provenance = "github-attestations"
 
+[tools.tree-sitter."platforms.linux-x64-baseline"]
+checksum = "sha256:d00ac0daefc4bf8c4b57842a5c0509927232faad1d83157b64fbad4e2e8d9a8b"
+url = "https://github.com/tree-sitter/tree-sitter/releases/download/v0.26.12/tree-sitter-linux-x64.gz"
+url_api = "https://api.github.com/repos/tree-sitter/tree-sitter/releases/assets/506408040"
+provenance = "github-attestations"
+
 [tools.tree-sitter."platforms.linux-x64-musl"]
+checksum = "sha256:d00ac0daefc4bf8c4b57842a5c0509927232faad1d83157b64fbad4e2e8d9a8b"
+url = "https://github.com/tree-sitter/tree-sitter/releases/download/v0.26.12/tree-sitter-linux-x64.gz"
+url_api = "https://api.github.com/repos/tree-sitter/tree-sitter/releases/assets/506408040"
+provenance = "github-attestations"
+
+[tools.tree-sitter."platforms.linux-x64-musl-baseline"]
 checksum = "sha256:d00ac0daefc4bf8c4b57842a5c0509927232faad1d83157b64fbad4e2e8d9a8b"
 url = "https://github.com/tree-sitter/tree-sitter/releases/download/v0.26.12/tree-sitter-linux-x64.gz"
 url_api = "https://api.github.com/repos/tree-sitter/tree-sitter/releases/assets/506408040"
@@ -351,7 +491,19 @@ url = "https://github.com/tree-sitter/tree-sitter/releases/download/v0.26.12/tre
 url_api = "https://api.github.com/repos/tree-sitter/tree-sitter/releases/assets/506408053"
 provenance = "github-attestations"
 
+[tools.tree-sitter."platforms.macos-x64-baseline"]
+checksum = "sha256:6827b218bce4d5403cb76ae3c269bc836d3124b75bb3477197ee9a8c8f6e79dc"
+url = "https://github.com/tree-sitter/tree-sitter/releases/download/v0.26.12/tree-sitter-macos-x64.gz"
+url_api = "https://api.github.com/repos/tree-sitter/tree-sitter/releases/assets/506408053"
+provenance = "github-attestations"
+
 [tools.tree-sitter."platforms.windows-x64"]
+checksum = "sha256:3445cf022efbc3ffcc391a55ccb29a3ce277eea91c719247c2dad4dd9dac70f6"
+url = "https://github.com/tree-sitter/tree-sitter/releases/download/v0.26.12/tree-sitter-windows-x64.gz"
+url_api = "https://api.github.com/repos/tree-sitter/tree-sitter/releases/assets/506408056"
+provenance = "github-attestations"
+
+[tools.tree-sitter."platforms.windows-x64-baseline"]
 checksum = "sha256:3445cf022efbc3ffcc391a55ccb29a3ce277eea91c719247c2dad4dd9dac70f6"
 url = "https://github.com/tree-sitter/tree-sitter/releases/download/v0.26.12/tree-sitter-windows-x64.gz"
 url_api = "https://api.github.com/repos/tree-sitter/tree-sitter/releases/assets/506408056"
@@ -379,7 +531,19 @@ url = "https://github.com/astral-sh/uv/releases/download/0.12.5/uv-x86_64-unknow
 url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/514851093"
 provenance = "github-attestations"
 
+[tools.uv."platforms.linux-x64-baseline"]
+checksum = "sha256:68a509da24b06b4223a1c0175fb5eb5bc79342b76cbeff0cfe51ac3f5b17b6b2"
+url = "https://github.com/astral-sh/uv/releases/download/0.12.5/uv-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/514851093"
+provenance = "github-attestations"
+
 [tools.uv."platforms.linux-x64-musl"]
+checksum = "sha256:a4742988791c9aeae68c78150d6cba762062ad2a47e53738c2779d2b596bfcdb"
+url = "https://github.com/astral-sh/uv/releases/download/0.12.5/uv-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/514851105"
+provenance = "github-attestations"
+
+[tools.uv."platforms.linux-x64-musl-baseline"]
 checksum = "sha256:a4742988791c9aeae68c78150d6cba762062ad2a47e53738c2779d2b596bfcdb"
 url = "https://github.com/astral-sh/uv/releases/download/0.12.5/uv-x86_64-unknown-linux-musl.tar.gz"
 url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/514851105"
@@ -397,7 +561,19 @@ url = "https://github.com/astral-sh/uv/releases/download/0.12.5/uv-x86_64-apple-
 url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/514851078"
 provenance = "github-attestations"
 
+[tools.uv."platforms.macos-x64-baseline"]
+checksum = "sha256:b3b2137477cf96c9686ebfb71524614cec780c673fd73e59bce099aef02e70e8"
+url = "https://github.com/astral-sh/uv/releases/download/0.12.5/uv-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/514851078"
+provenance = "github-attestations"
+
 [tools.uv."platforms.windows-x64"]
+checksum = "sha256:4c4d49d8738847d9b71ba319e49a5688c93eac0fe6204b1df24e98528dddf39a"
+url = "https://github.com/astral-sh/uv/releases/download/0.12.5/uv-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/514851084"
+provenance = "github-attestations"
+
+[tools.uv."platforms.windows-x64-baseline"]
 checksum = "sha256:4c4d49d8738847d9b71ba319e49a5688c93eac0fe6204b1df24e98528dddf39a"
 url = "https://github.com/astral-sh/uv/releases/download/0.12.5/uv-x86_64-pc-windows-msvc.zip"
 url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/514851084"
@@ -416,7 +592,13 @@ url = "https://classic.yarnpkg.com/downloads/1.22.22/yarn-v1.22.22.tar.gz"
 [tools.yarn."platforms.linux-x64"]
 url = "https://classic.yarnpkg.com/downloads/1.22.22/yarn-v1.22.22.tar.gz"
 
+[tools.yarn."platforms.linux-x64-baseline"]
+url = "https://classic.yarnpkg.com/downloads/1.22.22/yarn-v1.22.22.tar.gz"
+
 [tools.yarn."platforms.linux-x64-musl"]
+url = "https://classic.yarnpkg.com/downloads/1.22.22/yarn-v1.22.22.tar.gz"
+
+[tools.yarn."platforms.linux-x64-musl-baseline"]
 url = "https://classic.yarnpkg.com/downloads/1.22.22/yarn-v1.22.22.tar.gz"
 
 [tools.yarn."platforms.macos-arm64"]
@@ -425,5 +607,11 @@ url = "https://classic.yarnpkg.com/downloads/1.22.22/yarn-v1.22.22.tar.gz"
 [tools.yarn."platforms.macos-x64"]
 url = "https://classic.yarnpkg.com/downloads/1.22.22/yarn-v1.22.22.tar.gz"
 
+[tools.yarn."platforms.macos-x64-baseline"]
+url = "https://classic.yarnpkg.com/downloads/1.22.22/yarn-v1.22.22.tar.gz"
+
 [tools.yarn."platforms.windows-x64"]
+url = "https://classic.yarnpkg.com/downloads/1.22.22/yarn-v1.22.22.tar.gz"
+
+[tools.yarn."platforms.windows-x64-baseline"]
 url = "https://classic.yarnpkg.com/downloads/1.22.22/yarn-v1.22.22.tar.gz"
