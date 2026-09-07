@@ -32,6 +32,38 @@ Piのグローバル指示と`settings.json`は`~/.pi/agent/`へリンクする�
 
 Piの認証情報（`auth.json`）、セッション、モデルカタログ、信頼情報などの実行時データは管理・置換しない。`lastChangelogVersion`は初期設定に含めない（Piが後から書き込む場合がある）。`/settings`等で保存した変更はリンク先のdotfilesにも反映される。リンク時は既存設定ファイルを置換するため、必要なら事前にバックアップする。
 
+### GitHub SSH認証
+
+SSH鍵を作成し、表示された公開鍵を[GitHub Settings > SSH and GPG keys](https://github.com/settings/keys)の「New SSH key」から登録する。既存の`~/.ssh/id_ed25519`がある場合は上書きせず、その公開鍵を使用する。
+
+```bash
+ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519
+cat ~/.ssh/id_ed25519.pub
+```
+
+`-N ""`はパスフレーズなしで鍵を作成する指定。パスフレーズを設定する場合は省略する。
+
+このリポジトリもSSHで接続する場合は、リモートURLを変更する。
+
+```bash
+git remote set-url origin git@github.com:smdhnz/dotfiles.git
+```
+
+### Docker
+
+Docker Engineをインストールし、現在のユーザーを`docker`グループに追加する。
+
+```bash
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker "$USER"
+```
+
+`docker`グループにはroot相当の権限が付与される。グループ変更の反映には再ログインが必要。WSLではWindows側のPowerShellで次を実行し、Ubuntuを開き直す（すべてのWSLディストリビューションが停止する）。
+
+```powershell
+wsl --shutdown
+```
+
 ## 更新
 
 ```bash
